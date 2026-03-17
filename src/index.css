@@ -6,3 +6,50 @@ body {
   background-color: #242424;
   color: #ffffff;
 }
+
+.app-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.app-container h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #f0f0f0;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.action-button {
+  flex: 1;
+  background-color: #424242;
+  color: #e0e0e0;
+  border: 1px solid #616161;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #4f4f4f;
+  border-color: #757575;
+  color: #ffffff;
+}
+
+.action-button:active {
+  background-color: #333333;
+}

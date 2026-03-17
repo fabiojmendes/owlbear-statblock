@@ -1,9 +1,9 @@
 {
-  "name": "Hello, World!",
+  "name": "owlbear-statblock",
   "version": "1.0.0",
   "manifest_version": 1,
   "action": {
-    "title": "Hello, World!",
+    "title": "Statblock",
     "icon": "/icon.svg",
     "popover": "/",
     "height": 200,

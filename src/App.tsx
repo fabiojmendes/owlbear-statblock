@@ -24,14 +24,18 @@ function App() {
   }
 
   return (
-    <section>
+    <section className="app-container">
       <h1>StatBlock</h1>
-      <button type="button" onClick={popover}>
-        Show
-      </button>
-      <button type="button" onClick={combat}>
-        Combat!
-      </button>
+      <div className="button-group">
+        <button className="action-button" type="button" onClick={popover}>
+          Show
+        </button>
+      </div>
+      <div className="button-group">
+        <button className="action-button" type="button" onClick={combat}>
+          Combat!
+        </button>
+      </div>
     </section>
   );
 }
