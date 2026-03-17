@@ -1,8 +1,208 @@
-* {
-  color: white;
+:root {
+  --statblock-bg: #fdf1dc;
+  --statblock-text: #000000;
+  --statblock-red: #7a200d;
+  --statblock-line: #922610;
+  --statblock-alt-bg: #e0e5c1;
 }
 
-button {
-  color: rgba(0, 0, 0, 0.87);
-  background-color: gray;
+body {
+  margin: 0;
+  font-family: "Georgia", serif;
+  background-color: var(--statblock-bg);
+  color: var(--statblock-text);
+  overflow-y: auto;
+}
+
+.statblock {
+  padding: 0 10px 10px 10px;
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 13px;
+  line-height: 1.3em;
+}
+
+.statblock-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--statblock-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  z-index: 10;
+  border-bottom: 2px solid var(--statblock-line);
+  margin-bottom: 8px;
+}
+
+.statblock h1 {
+  color: var(--statblock-red);
+  font-family: "Georgia", serif;
+  font-size: 22px;
+  margin: 0;
+  font-weight: normal;
+  text-transform: uppercase;
+  flex: 1;
+  padding-right: 10px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minimize-icon-button,
+.close-icon-button {
+  background: none;
+  border: none;
+  color: var(--statblock-red);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transition: color 0.2s;
+}
+
+.minimize-icon-button:hover,
+.close-icon-button:hover {
+  color: #5c180a;
+}
+
+.statblock-content.minimized {
+  display: none;
+}
+
+.statblock .subtitle {
+  font-style: italic;
+  margin: 0 0 8px 0;
+  color: var(--statblock-text);
+}
+
+.statblock .rule {
+  height: 4px;
+  background-color: var(--statblock-line);
+  margin: 6px 0;
+  border: none;
+}
+
+.statblock .rule-thin {
+  height: 2px;
+  background-color: var(--statblock-line);
+  margin: 6px 0;
+  border: none;
+}
+
+.statblock .red-text {
+  color: var(--statblock-red);
+  font-weight: bold;
+}
+
+.statblock .prop-line {
+  margin: 4px 0;
+}
+
+.statblock .prop-name {
+  font-weight: bold;
+}
+
+.statblock-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 8px;
+  row-gap: 4px;
+  margin: 10px 0;
+  background-color: var(--statblock-alt-bg);
+  padding: 4px;
+}
+
+.ability-block {
+  display: grid;
+  grid-template-columns: 2.5em 1.5em 2em 2em;
+  align-items: center;
+  font-size: 12px;
+}
+
+.ability-name {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.ability-score {
+  text-align: right;
+  margin-right: 4px;
+}
+
+.ability-mod-label,
+.ability-save-label {
+  font-size: 9px;
+  color: #666;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.ability-value {
+  text-align: center;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.ability-header-row {
+  display: contents;
+}
+
+.statblock-section-title {
+  color: var(--statblock-red);
+  font-family: "Georgia", serif;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 12px 0 6px 0;
+  border-bottom: 1px solid var(--statblock-line);
+  padding-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.statblock-trait {
+  margin-bottom: 8px;
+}
+
+.statblock-trait-name {
+  font-weight: bold;
+  font-style: italic;
+}
+
+button.rollable {
+  background: none;
+  border: none;
+  color: var(--statblock-red);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+button.rollable:hover {
+  color: red;
+}
+
+.close-button {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 8px;
+  background-color: var(--statblock-red);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Georgia", serif;
+}
+
+.close-button:hover {
+  background-color: #5c180a;
 }

@@ -8,8 +8,10 @@ function App() {
       id: `${ID}/statblock`,
       url: "/statblock",
       height: 500,
-      width: 400,
+      width: 450,
       disableClickAway: true,
+      anchorOrigin: { horizontal: "RIGHT", vertical: "TOP" },
+      marginThreshold: 75,
     });
   };
 
