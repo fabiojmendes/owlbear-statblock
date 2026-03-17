@@ -194,7 +194,19 @@ function StatBlock() {
     <div className="statblock-wrapper">
       <div className="statblock">
         <div className="statblock-header">
-          <h1>{monster?.name || "Stat Block"}</h1>
+          <h1>
+            {monster ? (
+              <a
+                href={`https://5etools.juzam.pro/bestiary.html#${encodeURIComponent(monster.name.toLowerCase())}_${monster.source.toLowerCase()}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {monster.name}
+              </a>
+            ) : (
+              "Stat Block"
+            )}
+          </h1>
           <div className="header-controls">
             <button
               className="minimize-icon-button"

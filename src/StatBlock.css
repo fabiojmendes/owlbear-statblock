@@ -11,12 +11,13 @@
   font-family: "Georgia", serif;
   background-color: var(--statblock-bg);
   color: var(--statblock-text);
-  min-height: 100vh;
+  height: 100vh;
   overflow-y: auto;
+  position: relative;
 }
 
 .statblock {
-  padding: 0 10px 10px 10px;
+  padding: 0 16px 16px 16px;
   max-width: 400px;
   margin: 0 auto;
   font-size: 13px;
@@ -30,21 +31,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  z-index: 10;
+  padding: 12px 0;
+  z-index: 100;
   border-bottom: 2px solid var(--statblock-line);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  /* Add a small shadow to make it clear it's floating over content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .statblock h1 {
   color: var(--statblock-red);
-  font-family: "Georgia", serif;
   font-size: 22px;
   margin: 0;
-  font-weight: normal;
-  text-transform: uppercase;
-  flex: 1;
-  padding-right: 10px;
+}
+.statblock h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.statblock h1 a:hover {
+  text-decoration: underline;
 }
 
 .header-controls {
