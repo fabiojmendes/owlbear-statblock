@@ -13,6 +13,8 @@ import {
 import { parseText } from "./utils/parser";
 import { handleRollClick } from "./utils/roll";
 
+import "./StatBlock.css";
+
 function formatAC(acData: any): string {
   if (!acData) return "";
   if (Array.isArray(acData)) {
@@ -189,192 +191,199 @@ function StatBlock() {
   };
 
   return (
-    <div className="statblock">
-      <div className="statblock-header">
-        <h1>{monster?.name || "Stat Block"}</h1>
-        <div className="header-controls">
-          <button
-            className="minimize-icon-button"
-            type="button"
-            onClick={toggleMinimize}
-            aria-label={isMinimized ? "Expand" : "Minimize"}
-          >
-            {isMinimized ? "+" : "-"}
-          </button>
-          <button
-            className="close-icon-button"
-            type="button"
-            onClick={() => OBR.popover.close(`${ID}/statblock`)}
-            aria-label="Close"
-          >
-            &times;
-          </button>
+    <div className="statblock-wrapper">
+      <div className="statblock">
+        <div className="statblock-header">
+          <h1>{monster?.name || "Stat Block"}</h1>
+          <div className="header-controls">
+            <button
+              className="minimize-icon-button"
+              type="button"
+              onClick={toggleMinimize}
+              aria-label={isMinimized ? "Expand" : "Minimize"}
+            >
+              {isMinimized ? "+" : "-"}
+            </button>
+            <button
+              className="close-icon-button"
+              type="button"
+              onClick={() => OBR.popover.close(`${ID}/statblock`)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className={`statblock-content ${isMinimized ? "minimized" : ""}`}>
-        {!monster ? (
-          <p>Select a single token with a stat block to view it here.</p>
-        ) : (
-          <>
-            <div className="subtitle">
-              {formatSize(monster.size || ["M"])}{" "}
-              {typeof monster.type === "string"
-                ? monster.type
-                : monster.type?.type +
-                  (monster.type?.tags
-                    ? ` (${monster.type.tags.join(", ")})`
-                    : "")}
-              {monster.alignment
-                ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
-                : ""}
-            </div>
-            <hr className="rule" />
-
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              {renderProperty("AC", formatAC(monster.ac))}
-              <div className="prop-line">
-                <span className="prop-name">Initiative</span>{" "}
-                <button
-                  type="button"
-                  className="rollable"
-                  onClick={() =>
-                    handleRollClick(`1d20+${getInitiativeBonus(monster)}`)
-                  }
-                >
-                  {getInitiativeBonus(monster) >= 0
-                    ? `+${getInitiativeBonus(monster)}`
-                    : getInitiativeBonus(monster)}
-                </button>
-                {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
+        <div className={`statblock-content ${isMinimized ? "minimized" : ""}`}>
+          {!monster ? (
+            <p>Select a single token with a stat block to view it here.</p>
+          ) : (
+            <>
+              <div className="subtitle">
+                {formatSize(monster.size || ["M"])}{" "}
+                {typeof monster.type === "string"
+                  ? monster.type
+                  : monster.type?.type +
+                    (monster.type?.tags
+                      ? ` (${monster.type.tags.join(", ")})`
+                      : "")}
+                {monster.alignment
+                  ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
+                  : ""}
               </div>
-            </div>
-            {renderProperty(
-              "HP",
-              monster.hp
-                ? `${monster.hp.average || ""} ${monster.hp.formula ? `(${monster.hp.formula})` : ""}`
-                : null,
-            )}
-            {renderProperty("Speed", formatSpeed(monster.speed))}
+              <hr className="rule" />
 
-            <hr className="rule" />
-            <div className="statblock-grid">
-              {[
-                { name: "str", label: "STR" },
-                { name: "dex", label: "DEX" },
-                { name: "con", label: "CON" },
-                { name: "int", label: "INT" },
-                { name: "wis", label: "WIS" },
-                { name: "cha", label: "CHA" },
-              ].map((stat) => {
-                const score = monster[stat.name] || 10;
-                const mod = getModifier(score);
-                const save = monster.save?.[stat.name] || mod;
-                return (
-                  <div key={stat.name} className="ability-block">
-                    <div className="ability-header-row">
-                      <div />
-                      <div />
-                      <div className="ability-mod-label">MOD</div>
-                      <div className="ability-save-label">SAVE</div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                {renderProperty("AC", formatAC(monster.ac))}
+                <div className="prop-line">
+                  <span className="prop-name">Initiative</span>{" "}
+                  <button
+                    type="button"
+                    className="rollable"
+                    onClick={() =>
+                      handleRollClick(`1d20+${getInitiativeBonus(monster)}`)
+                    }
+                  >
+                    {getInitiativeBonus(monster) >= 0
+                      ? `+${getInitiativeBonus(monster)}`
+                      : getInitiativeBonus(monster)}
+                  </button>
+                  {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
+                </div>
+              </div>
+              {renderProperty(
+                "HP",
+                monster.hp
+                  ? `${monster.hp.average || ""} ${monster.hp.formula ? `(${monster.hp.formula})` : ""}`
+                  : null,
+              )}
+              {renderProperty("Speed", formatSpeed(monster.speed))}
+
+              <hr className="rule" />
+              <div className="statblock-grid">
+                {[
+                  { name: "str", label: "STR" },
+                  { name: "dex", label: "DEX" },
+                  { name: "con", label: "CON" },
+                  { name: "int", label: "INT" },
+                  { name: "wis", label: "WIS" },
+                  { name: "cha", label: "CHA" },
+                ].map((stat) => {
+                  const score = monster[stat.name] || 10;
+                  const mod = getModifier(score);
+                  const save = monster.save?.[stat.name] || mod;
+                  return (
+                    <div key={stat.name} className="ability-block">
+                      <div className="ability-header-row">
+                        <div />
+                        <div />
+                        <div className="ability-mod-label">MOD</div>
+                        <div className="ability-save-label">SAVE</div>
+                      </div>
+                      <div className="ability-name">{stat.label}</div>
+                      <div className="ability-score">{score}</div>
+                      <button
+                        type="button"
+                        className="rollable ability-value"
+                        onClick={() => handleRollClick(`1d20${mod}`)}
+                      >
+                        {mod}
+                      </button>
+                      <button
+                        type="button"
+                        className="rollable ability-value"
+                        onClick={() => handleRollClick(`1d20${save}`)}
+                      >
+                        {save}
+                      </button>
                     </div>
-                    <div className="ability-name">{stat.label}</div>
-                    <div className="ability-score">{score}</div>
-                    <button
-                      type="button"
-                      className="rollable ability-value"
-                      onClick={() => handleRollClick(`1d20${mod}`)}
-                    >
-                      {mod}
-                    </button>
-                    <button
-                      type="button"
-                      className="rollable ability-value"
-                      onClick={() => handleRollClick(`1d20${save}`)}
-                    >
-                      {save}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            <hr className="rule" />
+                  );
+                })}
+              </div>
+              <hr className="rule" />
 
-            {renderProperty(
-              "Skills",
-              monster.skill
-                ? Object.entries(monster.skill)
-                    .map(
-                      ([k, v]) =>
-                        `${k.charAt(0).toUpperCase() + k.slice(1)} ${v}`,
-                    )
-                    .join(", ")
-                : null,
-            )}
-            {renderProperty(
-              "Damage Vulnerabilities",
-              monster.vulnerable?.join(", "),
-            )}
-            {renderProperty("Damage Resistances", monster.resist?.join(", "))}
-            {renderProperty("Damage Immunities", monster.immune?.join(", "))}
-            {renderProperty(
-              "Condition Immunities",
-              monster.conditionImmune?.join(", "),
-            )}
-            {renderProperty(
-              "Senses",
-              monster.senses
-                ? [
-                    ...monster.senses,
-                    `Passive Perception ${monster.passive || 10}`,
-                  ].join(", ")
-                : `Passive Perception ${monster.passive || 10}`,
-            )}
-            {renderProperty("Languages", monster.languages?.join(", ") || "--")}
-            {renderProperty(
-              "CR",
-              monster.cr ? (
+              {renderProperty(
+                "Skills",
+                monster.skill
+                  ? Object.entries(monster.skill)
+                      .map(
+                        ([k, v]) =>
+                          `${k.charAt(0).toUpperCase() + k.slice(1)} ${v}`,
+                      )
+                      .join(", ")
+                  : null,
+              )}
+              {renderProperty(
+                "Damage Vulnerabilities",
+                monster.vulnerable?.join(", "),
+              )}
+              {renderProperty("Damage Resistances", monster.resist?.join(", "))}
+              {renderProperty("Damage Immunities", monster.immune?.join(", "))}
+              {renderProperty(
+                "Condition Immunities",
+                monster.conditionImmune?.join(", "),
+              )}
+              {renderProperty(
+                "Senses",
+                monster.senses
+                  ? [
+                      ...monster.senses,
+                      `Passive Perception ${monster.passive || 10}`,
+                    ].join(", ")
+                  : `Passive Perception ${monster.passive || 10}`,
+              )}
+              {renderProperty(
+                "Languages",
+                monster.languages?.join(", ") || "--",
+              )}
+              {renderProperty(
+                "CR",
+                monster.cr ? (
+                  <>
+                    {typeof monster.cr === "string"
+                      ? monster.cr
+                      : monster.cr.cr}
+                    {` (PB +${getProficiencyBonus(monster.cr)})`}
+                  </>
+                ) : null,
+              )}
+
+              <hr className="rule" />
+
+              {monster.trait && renderTraits(monster.trait)}
+              {monster.spellcasting && renderSpellcasting(monster.spellcasting)}
+
+              {monster.action && (
                 <>
-                  {typeof monster.cr === "string" ? monster.cr : monster.cr.cr}
-                  {` (PB +${getProficiencyBonus(monster.cr)})`}
+                  <h2 className="statblock-section-title">Actions</h2>
+                  {renderTraits(monster.action)}
                 </>
-              ) : null,
-            )}
+              )}
 
-            <hr className="rule" />
+              {monster.bonus && (
+                <>
+                  <h2 className="statblock-section-title">Bonus Actions</h2>
+                  {renderTraits(monster.bonus)}
+                </>
+              )}
 
-            {monster.trait && renderTraits(monster.trait)}
-            {monster.spellcasting && renderSpellcasting(monster.spellcasting)}
+              {monster.reaction && (
+                <>
+                  <h2 className="statblock-section-title">Reactions</h2>
+                  {renderTraits(monster.reaction)}
+                </>
+              )}
 
-            {monster.action && (
-              <>
-                <h2 className="statblock-section-title">Actions</h2>
-                {renderTraits(monster.action)}
-              </>
-            )}
-
-            {monster.bonus && (
-              <>
-                <h2 className="statblock-section-title">Bonus Actions</h2>
-                {renderTraits(monster.bonus)}
-              </>
-            )}
-
-            {monster.reaction && (
-              <>
-                <h2 className="statblock-section-title">Reactions</h2>
-                {renderTraits(monster.reaction)}
-              </>
-            )}
-
-            {monster.legendary && (
-              <>
-                <h2 className="statblock-section-title">Legendary Actions</h2>
-                {renderTraits(monster.legendary)}
-              </>
-            )}
-          </>
-        )}
+              {monster.legendary && (
+                <>
+                  <h2 className="statblock-section-title">Legendary Actions</h2>
+                  {renderTraits(monster.legendary)}
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
