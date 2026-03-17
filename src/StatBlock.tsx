@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 import { ID } from "./main";
 
 function StatBlock() {
-  const [item, setItem] = useState({});
+  const [monster, setMonster] = useState({});
+
   useEffect(() => {
     OBR.player.onChange(async (player) => {
       if (player.selection && player.selection.length === 1) {
         const items = await OBR.scene.items.getItems(player.selection);
-        setItem(items[0].metadata);
+        const monster = items[0].metadata[`${ID}/monster`];
+        if (monster) {
+          setMonster(monster);
+        }
       }
     });
   });
@@ -16,7 +20,7 @@ function StatBlock() {
     <section>
       <div>
         <h1>Get started</h1>
-        <code>{JSON.stringify(item)}</code>
+        <code>{JSON.stringify(monster)}</code>
         <button
           type="button"
           onClick={() => OBR.popover.close(`${ID}/statblock`)}
