@@ -11,7 +11,7 @@ import {
   getProficiencyBonus,
 } from "./utils/helpers";
 import { parseText } from "./utils/parser";
-import { handleRollClick } from "./utils/roll";
+import { handleD20RollClick } from "./utils/roll";
 
 import "./StatBlock.css";
 
@@ -253,10 +253,11 @@ function StatBlock() {
                   <button
                     type="button"
                     className="rollable"
-                    onClick={() =>
-                      handleRollClick(`1d20+${getInitiativeBonus(monster)}`)
+                    onClick={(e) =>
+                      handleD20RollClick(e, getInitiativeBonus(monster))
                     }
                   >
+                    {" "}
                     {getInitiativeBonus(monster) >= 0
                       ? `+${getInitiativeBonus(monster)}`
                       : getInitiativeBonus(monster)}
@@ -298,15 +299,16 @@ function StatBlock() {
                       <button
                         type="button"
                         className="rollable ability-value"
-                        onClick={() => handleRollClick(`1d20${mod}`)}
+                        onClick={(e) => handleD20RollClick(e, mod)}
                       >
                         {mod}
                       </button>
                       <button
                         type="button"
                         className="rollable ability-value"
-                        onClick={() => handleRollClick(`1d20${save}`)}
+                        onClick={(e) => handleD20RollClick(e, save)}
                       >
+                        {" "}
                         {save}
                       </button>
                     </div>

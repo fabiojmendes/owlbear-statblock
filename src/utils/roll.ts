@@ -1,5 +1,34 @@
 import OBR from "@owlbear-rodeo/sdk";
+import type React from "react";
 import { ID } from "../main.tsx";
+
+export async function handleD20RollClick(
+  e: React.MouseEvent,
+  bonus: number | string,
+  target: string = "everyone",
+  rollType: string = "roll",
+) {
+  let baseDice = "1d20";
+  if (e.shiftKey) {
+    baseDice = "2d20kh1";
+  } else if (e.ctrlKey || e.metaKey) {
+    baseDice = "2d20kl1";
+  }
+
+  let formattedBonus = String(bonus);
+  if (
+    !formattedBonus.startsWith("+") &&
+    !formattedBonus.startsWith("-") &&
+    Number(formattedBonus) >= 0
+  ) {
+    formattedBonus = `+${formattedBonus}`;
+  } else if (Number(formattedBonus) < 0 && !formattedBonus.startsWith("-")) {
+    formattedBonus = `-${Math.abs(Number(formattedBonus))}`;
+  }
+
+  const notation = `${baseDice}${formattedBonus}`;
+  return handleRollClick(notation, target, rollType);
+}
 
 export async function handleRollClick(
   notation: string,

@@ -1,5 +1,5 @@
 import React from "react";
-import { handleRollClick } from "./roll";
+import { handleD20RollClick, handleRollClick } from "./roll";
 
 // Regex to find 5etools style tags
 const tagRegex = /\{@([a-z]+)(?: ([^}]+))?\}/g;
@@ -47,11 +47,7 @@ export function parseText(text: string): React.ReactNode[] {
             type="button"
             key={match.index}
             className="rollable"
-            onClick={() =>
-              handleRollClick(
-                `1d20${mainValue.startsWith("+") || mainValue.startsWith("-") ? mainValue : `+${mainValue}`}`,
-              )
-            }
+            onClick={(e) => handleD20RollClick(e, mainValue)}
           >
             {mainValue.startsWith("+") || mainValue.startsWith("-")
               ? mainValue
