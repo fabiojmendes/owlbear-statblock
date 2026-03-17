@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 import { ID } from "./main";
 import {
+  formatAlignment,
+  formatSize,
   getInitiativeBonus,
   getModifier,
   getPassiveInitiative,
@@ -115,25 +117,6 @@ function StatBlock() {
     await OBR.popover.setHeight(`${ID}/statblock`, newMinimized ? 60 : 500);
   };
 
-  if (!monster) {
-    return (
-      <div className="statblock">
-        <div className="statblock-header">
-          <h1>Stat Block</h1>
-          <button
-            className="close-icon-button"
-            type="button"
-            onClick={() => OBR.popover.close(`${ID}/statblock`)}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-        </div>
-        <p>Select a single token with a stat block to view it here.</p>
-      </div>
-    );
-  }
-
   const renderTraits = (traits: any[]) => {
     if (!traits || !Array.isArray(traits)) return null;
     return traits.map((trait, idx) => (
@@ -208,7 +191,7 @@ function StatBlock() {
   return (
     <div className="statblock">
       <div className="statblock-header">
-        <h1>{monster.name}</h1>
+        <h1>{monster?.name || "Stat Block"}</h1>
         <div className="header-controls">
           <button
             className="minimize-icon-button"
@@ -230,157 +213,166 @@ function StatBlock() {
       </div>
 
       <div className={`statblock-content ${isMinimized ? "minimized" : ""}`}>
-        <div className="subtitle">
-          {monster.size?.join("") || "M"}{" "}
-          {typeof monster.type === "string"
-            ? monster.type
-            : monster.type?.type +
-              (monster.type?.tags ? ` (${monster.type.tags.join(", ")})` : "")}
-          {monster.alignment
-            ? `, ${monster.alignmentPrefix || ""}${monster.alignment.join(" ")}`
-            : ""}
-        </div>
-        <hr className="rule" />
+        {!monster ? (
+          <p>Select a single token with a stat block to view it here.</p>
+        ) : (
+          <>
+            <div className="subtitle">
+              {formatSize(monster.size || ["M"])}{" "}
+              {typeof monster.type === "string"
+                ? monster.type
+                : monster.type?.type +
+                  (monster.type?.tags
+                    ? ` (${monster.type.tags.join(", ")})`
+                    : "")}
+              {monster.alignment
+                ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
+                : ""}
+            </div>
+            <hr className="rule" />
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {renderProperty("AC", formatAC(monster.ac))}
-          <div className="prop-line">
-            <span className="prop-name">Initiative</span>{" "}
-            <button
-              type="button"
-              className="rollable"
-              onClick={() =>
-                handleRollClick(`1d20+${getInitiativeBonus(monster)}`)
-              }
-            >
-              {getInitiativeBonus(monster) >= 0
-                ? `+${getInitiativeBonus(monster)}`
-                : getInitiativeBonus(monster)}
-            </button>
-            {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
-          </div>
-        </div>
-        {renderProperty(
-          "HP",
-          monster.hp
-            ? `${monster.hp.average || ""} ${monster.hp.formula ? `(${monster.hp.formula})` : ""}`
-            : null,
-        )}
-        {renderProperty("Speed", formatSpeed(monster.speed))}
-
-        <hr className="rule" />
-        <div className="statblock-grid">
-          {[
-            { name: "str", label: "STR" },
-            { name: "dex", label: "DEX" },
-            { name: "con", label: "CON" },
-            { name: "int", label: "INT" },
-            { name: "wis", label: "WIS" },
-            { name: "cha", label: "CHA" },
-          ].map((stat) => {
-            const score = monster[stat.name] || 10;
-            const mod = getModifier(score);
-            const save = monster.save?.[stat.name] || mod;
-            return (
-              <div key={stat.name} className="ability-block">
-                <div className="ability-header-row">
-                  <div />
-                  <div />
-                  <div className="ability-mod-label">MOD</div>
-                  <div className="ability-save-label">SAVE</div>
-                </div>
-                <div className="ability-name">{stat.label}</div>
-                <div className="ability-score">{score}</div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              {renderProperty("AC", formatAC(monster.ac))}
+              <div className="prop-line">
+                <span className="prop-name">Initiative</span>{" "}
                 <button
                   type="button"
-                  className="rollable ability-value"
-                  onClick={() => handleRollClick(`1d20${mod}`)}
+                  className="rollable"
+                  onClick={() =>
+                    handleRollClick(`1d20+${getInitiativeBonus(monster)}`)
+                  }
                 >
-                  {mod}
+                  {getInitiativeBonus(monster) >= 0
+                    ? `+${getInitiativeBonus(monster)}`
+                    : getInitiativeBonus(monster)}
                 </button>
-                <button
-                  type="button"
-                  className="rollable ability-value"
-                  onClick={() => handleRollClick(`1d20${save}`)}
-                >
-                  {save}
-                </button>
+                {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
               </div>
-            );
-          })}
-        </div>
-        <hr className="rule" />
+            </div>
+            {renderProperty(
+              "HP",
+              monster.hp
+                ? `${monster.hp.average || ""} ${monster.hp.formula ? `(${monster.hp.formula})` : ""}`
+                : null,
+            )}
+            {renderProperty("Speed", formatSpeed(monster.speed))}
 
-        {renderProperty(
-          "Skills",
-          monster.skill
-            ? Object.entries(monster.skill)
-                .map(
-                  ([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)} ${v}`,
-                )
-                .join(", ")
-            : null,
-        )}
-        {renderProperty(
-          "Damage Vulnerabilities",
-          monster.vulnerable?.join(", "),
-        )}
-        {renderProperty("Damage Resistances", monster.resist?.join(", "))}
-        {renderProperty("Damage Immunities", monster.immune?.join(", "))}
-        {renderProperty(
-          "Condition Immunities",
-          monster.conditionImmune?.join(", "),
-        )}
-        {renderProperty(
-          "Senses",
-          monster.senses
-            ? [
-                ...monster.senses,
-                `Passive Perception ${monster.passive || 10}`,
-              ].join(", ")
-            : `Passive Perception ${monster.passive || 10}`,
-        )}
-        {renderProperty("Languages", monster.languages?.join(", ") || "--")}
-        {renderProperty(
-          "CR",
-          monster.cr ? (
-            <>
-              {typeof monster.cr === "string" ? monster.cr : monster.cr.cr}
-              {` (PB +${getProficiencyBonus(monster.cr)})`}
-            </>
-          ) : null,
-        )}
+            <hr className="rule" />
+            <div className="statblock-grid">
+              {[
+                { name: "str", label: "STR" },
+                { name: "dex", label: "DEX" },
+                { name: "con", label: "CON" },
+                { name: "int", label: "INT" },
+                { name: "wis", label: "WIS" },
+                { name: "cha", label: "CHA" },
+              ].map((stat) => {
+                const score = monster[stat.name] || 10;
+                const mod = getModifier(score);
+                const save = monster.save?.[stat.name] || mod;
+                return (
+                  <div key={stat.name} className="ability-block">
+                    <div className="ability-header-row">
+                      <div />
+                      <div />
+                      <div className="ability-mod-label">MOD</div>
+                      <div className="ability-save-label">SAVE</div>
+                    </div>
+                    <div className="ability-name">{stat.label}</div>
+                    <div className="ability-score">{score}</div>
+                    <button
+                      type="button"
+                      className="rollable ability-value"
+                      onClick={() => handleRollClick(`1d20${mod}`)}
+                    >
+                      {mod}
+                    </button>
+                    <button
+                      type="button"
+                      className="rollable ability-value"
+                      onClick={() => handleRollClick(`1d20${save}`)}
+                    >
+                      {save}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            <hr className="rule" />
 
-        <hr className="rule" />
+            {renderProperty(
+              "Skills",
+              monster.skill
+                ? Object.entries(monster.skill)
+                    .map(
+                      ([k, v]) =>
+                        `${k.charAt(0).toUpperCase() + k.slice(1)} ${v}`,
+                    )
+                    .join(", ")
+                : null,
+            )}
+            {renderProperty(
+              "Damage Vulnerabilities",
+              monster.vulnerable?.join(", "),
+            )}
+            {renderProperty("Damage Resistances", monster.resist?.join(", "))}
+            {renderProperty("Damage Immunities", monster.immune?.join(", "))}
+            {renderProperty(
+              "Condition Immunities",
+              monster.conditionImmune?.join(", "),
+            )}
+            {renderProperty(
+              "Senses",
+              monster.senses
+                ? [
+                    ...monster.senses,
+                    `Passive Perception ${monster.passive || 10}`,
+                  ].join(", ")
+                : `Passive Perception ${monster.passive || 10}`,
+            )}
+            {renderProperty("Languages", monster.languages?.join(", ") || "--")}
+            {renderProperty(
+              "CR",
+              monster.cr ? (
+                <>
+                  {typeof monster.cr === "string" ? monster.cr : monster.cr.cr}
+                  {` (PB +${getProficiencyBonus(monster.cr)})`}
+                </>
+              ) : null,
+            )}
 
-        {monster.trait && renderTraits(monster.trait)}
-        {monster.spellcasting && renderSpellcasting(monster.spellcasting)}
+            <hr className="rule" />
 
-        {monster.action && (
-          <>
-            <h2 className="statblock-section-title">Actions</h2>
-            {renderTraits(monster.action)}
-          </>
-        )}
+            {monster.trait && renderTraits(monster.trait)}
+            {monster.spellcasting && renderSpellcasting(monster.spellcasting)}
 
-        {monster.bonus && (
-          <>
-            <h2 className="statblock-section-title">Bonus Actions</h2>
-            {renderTraits(monster.bonus)}
-          </>
-        )}
+            {monster.action && (
+              <>
+                <h2 className="statblock-section-title">Actions</h2>
+                {renderTraits(monster.action)}
+              </>
+            )}
 
-        {monster.reaction && (
-          <>
-            <h2 className="statblock-section-title">Reactions</h2>
-            {renderTraits(monster.reaction)}
-          </>
-        )}
+            {monster.bonus && (
+              <>
+                <h2 className="statblock-section-title">Bonus Actions</h2>
+                {renderTraits(monster.bonus)}
+              </>
+            )}
 
-        {monster.legendary && (
-          <>
-            <h2 className="statblock-section-title">Legendary Actions</h2>
-            {renderTraits(monster.legendary)}
+            {monster.reaction && (
+              <>
+                <h2 className="statblock-section-title">Reactions</h2>
+                {renderTraits(monster.reaction)}
+              </>
+            )}
+
+            {monster.legendary && (
+              <>
+                <h2 className="statblock-section-title">Legendary Actions</h2>
+                {renderTraits(monster.legendary)}
+              </>
+            )}
           </>
         )}
       </div>

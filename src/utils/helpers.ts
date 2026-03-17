@@ -64,3 +64,36 @@ export function getPassiveInitiative(monster: any, initBonus: number): number {
   }
   return 10 + initBonus + advDisMod;
 }
+
+const sizeMap: Record<string, string> = {
+  T: "Tiny",
+  S: "Small",
+  M: "Medium",
+  L: "Large",
+  H: "Huge",
+  G: "Gargantuan",
+};
+
+export function formatSize(size: string[]): string {
+  return size.map((s) => sizeMap[s] || s).join(" or ");
+}
+
+const alignmentMap: Record<string, string> = {
+  L: "lawful",
+  C: "chaotic",
+  N: "neutral",
+  G: "good",
+  E: "evil",
+  A: "any alignment",
+  U: "unaligned",
+};
+
+export function formatAlignment(alignment: string[]): string {
+  if (
+    alignment.length === 1 &&
+    (alignment[0] === "A" || alignment[0] === "U")
+  ) {
+    return alignmentMap[alignment[0]];
+  }
+  return alignment.map((a) => alignmentMap[a] || a).join(" ");
+}

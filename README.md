@@ -31,8 +31,8 @@ layout and interactive rolling capabilities.
 2. **Open the Extension**: Click the Statblock icon in the Owlbear Rodeo
    toolbar.
 3. **Interact**: If the token has the required metadata (`monster` data in JSON
-   format), the stat block will render instantly. Click on any blue/red
-   highlighted number to trigger a roll.
+   format), the stat block renders instantly. Click on any blue/red highlighted
+   number to trigger a roll.
 
 ## Technical Details
 
