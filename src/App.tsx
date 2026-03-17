@@ -1,24 +1,36 @@
-import { useState } from "react";
-import "./App.css";
+import OBR from "@owlbear-rodeo/sdk";
+import { ID } from "./main.tsx";
+import StatBlock from "./StatBlock.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const popover = () => {
+    OBR.popover.open({
+      id: `${ID}/statblock`,
+      url: "/statblock",
+      height: 500,
+      width: 400,
+      disableClickAway: true,
+    });
+  };
+
+  const combat = () => {
+    console.log("Click");
+  };
+
+  if (window.location.pathname === "/statblock") {
+    return <StatBlock />;
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero"></div>
-        <div>
-          <h1>Get started</h1>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-    </>
+    <section>
+      <h1>StatBlock</h1>
+      <button type="button" onClick={popover}>
+        Show
+      </button>
+      <button type="button" onClick={combat}>
+        Combat!
+      </button>
+    </section>
   );
 }
 
