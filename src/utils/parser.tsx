@@ -41,6 +41,15 @@ export function parseText(text: string): React.ReactNode[] {
           );
         else elements.push(<em key={match.index}>{mainValue} Attack:</em>);
         break;
+      case "atkr":
+        if (mainValue === "m")
+          elements.push(<em key={match.index}>Melee Attack:</em>);
+        else if (mainValue === "r")
+          elements.push(<em key={match.index}>Ranged Attack:</em>);
+        else if (mainValue === "m,r" || mainValue === "rw,mw")
+          elements.push(<em key={match.index}>Melee or Ranged Attack:</em>);
+        else elements.push(<em key={match.index}>{mainValue} Attack:</em>);
+        break;
       case "hit":
         elements.push(
           <button
