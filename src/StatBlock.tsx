@@ -363,13 +363,19 @@ function StatBlock() {
 
               <hr className="rule" />
 
-              {monster.trait && renderTraits(monster.trait)}
-              {monster.spellcasting && renderSpellcasting(monster.spellcasting)}
+              {monster.trait && (
+                <>
+                  <h2 className="statblock-section-title">Traits</h2>
+                  {renderTraits(monster.trait)}
+                </>
+              )}
 
               {monster.action && (
                 <>
                   <h2 className="statblock-section-title">Actions</h2>
                   {renderTraits(monster.action)}
+                  {monster.spellcasting &&
+                    renderSpellcasting(monster.spellcasting)}
                 </>
               )}
 
