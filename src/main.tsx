@@ -63,27 +63,28 @@ function findMonster(name: string) {
 
 await fetchBestiary();
 
-OBR.onReady(() => {
+OBR.onReady(async () => {
+  if ((await OBR.player.getRole()) !== "GM") {
+    OBR.notification.show("Only GM has access to stat blocks");
+    return;
+  }
+
   OBR.scene.items.onChange((items) => {
-    for (const item of items) {
-      if (item.layer !== "CHARACTER" || item.metadata[`${ID}/monster`]) {
-        continue;
-      }
+    const characters = items.filter(
+      (item) =>
+        item.layer === "CHARACTER" &&
+        item.metadata[`${ID}/monster`] === undefined,
+    );
 
-      console.log("Init item", item);
-
-      const monster = findMonster(item.name);
-      if (!monster) {
-        continue;
-      }
-      console.log("Init monster", monster);
-
-      OBR.scene.items.updateItems([item], (items) => {
-        for (const item of items) {
-          item.metadata[`${ID}/monster`] = monster;
+    OBR.scene.items.updateItems(characters, (items) => {
+      for (const item of items) {
+        const monster = findMonster(item.name);
+        if (!monster) {
+          continue;
         }
-      });
-    }
+        item.metadata[`${ID}/monster`] = monster;
+      }
+    });
   });
 
   const rootElement = document.getElementById("root");
