@@ -1,6 +1,6 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <!-- Parchment Background -->
-  <rect x="40" y="40" width="432" height="432" rx="20" fill="#fdf1dc" stroke="#922610" stroke-width="8"/>
+  <rect x="0" y="0" width="512" height="512" fill="#fdf1dc"/>
   
   <!-- Header Section -->
   <rect x="60" y="70" width="300" height="30" rx="4" fill="#7a200d"/>
