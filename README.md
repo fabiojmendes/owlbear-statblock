@@ -3,26 +3,35 @@
 A highly polished, interactive D&D 5e monster stat block renderer for
 [Owlbear Rodeo](https://www.owlbear.rodeo/). This extension allows GMs to view
 detailed monster information directly within their VTT, featuring a classic 5e
-layout and interactive rolling capabilities.
+layout, modern 2024 styling, and powerful interactive rolling capabilities.
 
 ## Features
 
-- **Classic 5e Visuals**: A beautiful, parchment-themed stat block that mimics
-  the look and feel of the official monster manuals.
+- **Classic 5e Visuals**: A beautiful, parchment-themed stat block with
+  authentic typography and fluid scaling.
 - **Interactive Rolls**:
-  - Click on **Attack Hit Modifiers** (e.g., `+7`) to roll to hit.
-  - Click on **Damage Formulas** (e.g., `2d6 + 4`) to roll damage.
-  - Click on **Attribute Modifiers** or **Saving Throws** to roll ability checks
-    or saves.
-  - Click on **Initiative** to roll for turn order.
-- **Sticky Header**: The monster's name and a close icon stay visible at the top
-  of the window while you scroll through long lists of traits and actions.
-- **Dynamic 2024 Grid**: Features the new 3-column attribute grid showing Score,
-  Modifier (MOD), and Saving Throw (SAVE) side-by-side.
-- **Multi-Source Data**: Supports loading monster data from multiple JSON
-  bestiaries (5etools compatible format).
-- **Responsive Layout**: Designed to fit perfectly within the Owlbear Rodeo
-  popover system.
+  - **Advantage/Disadvantage Support**: Hold **Shift** while clicking to roll
+    with Advantage (`2d20kh1`), or **Ctrl/Cmd** to roll with Disadvantage
+    (`2d20kl1`).
+  - **Attacks**: Click on hit modifiers (e.g., `+7`) or damage formulas (e.g.,
+    `2d6 + 4`).
+  - **Attributes**: Integrated 3-column grid showing Score, Modifier (MOD), and
+    Saving Throw (SAVE) side-by-side—all clickable.
+  - **Initiative**: Click the initiative bonus next to AC to roll for turn
+    order.
+  - **Recharges**: Click on recharge ranges (e.g., `5-6`) to roll a `1d6`
+    recharge check.
+- **Improved UX**:
+  - **Sticky Header**: The monster's name and controls stay visible at the top
+    while scrolling.
+  - **Minimize/Expand**: Quickly collapse the stat block to just the header to
+    save screen space.
+  - **5etools Integration**: The monster name links directly to its full entry
+    on [5etools](https://5etools.juzam.pro/).
+- **Security**: Access is restricted to the **GM role only** to prevent players
+  from seeing monster statistics.
+- **Multi-Source Data**: Automatically loads and caches monster data from
+  multiple JSON bestiaries (5etools compatible).
 
 ## How to Use
 
@@ -30,45 +39,36 @@ layout and interactive rolling capabilities.
    scene.
 2. **Open the Extension**: Click the Statblock icon in the Owlbear Rodeo
    toolbar.
-3. **Interact**: If the token has the required metadata (`monster` data in JSON
-   format), the stat block renders instantly. Click on any blue/red highlighted
-   number to trigger a roll.
+3. **Interact**: The stat block renders instantly for recognized monsters. Use
+   keyboard modifiers (Shift/Ctrl) for quick advantage/disadvantage rolls.
 
 ## Technical Details
 
-This extension is built using:
+Built with a focus on performance and developer experience:
 
-- **React + TypeScript**: For a robust and type-safe UI.
-- **Vite**: For fast development and optimized production builds.
-- **Owlbear Rodeo SDK**: To communicate with the VTT, handle selections, and
-  broadcast rolls.
-- **Custom 5etools Parser**: A regex-based parser that converts special tags
-  (like `{@hit 7}` or `{@damage 2d6+4}`) into interactive UI elements.
-
-### Metadata Format
-
-The extension expects the monster data to be stored in the item's metadata under
-the key `${ID}/monster`. The format should follow the standard 5etools JSON
-structure.
+- **React + TypeScript**: Type-safe component architecture.
+- **Custom Vite Plugin**: Automatically syncs `manifest.json` versions with
+  `package.json` and appends a `(DEV)` flag during local development.
+- **Custom 5etools Parser**: Robust regex-based parser handling complex tags
+  like `{@hit}`, `{@damage}`, `{@recharge}`, `{@actSave}`, and more.
+- **Battle Board Integration**: Includes hooks for initializing combat and
+  syncing metadata with the Battle Board extension.
 
 ## Development
 
-To run the project locally:
-
-1. Clone the repository.
-2. Install dependencies:
+1. **Install Dependencies**:
    ```bash
    npm install
    ```
-3. Start the development server:
+2. **Local Development**:
    ```bash
    npm run dev
    ```
-4. Linter and formatter
+3. **Quality Control**:
    ```bash
-   npm run format && npm run check
+   npm run format && npm run lint
    ```
-5. Build for production:
+4. **Production Build**:
    ```bash
    npm run build
    ```
