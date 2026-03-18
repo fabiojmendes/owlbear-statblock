@@ -17,7 +17,10 @@ function manifestPlugin() {
       server.middlewares.use(async (req: any, res: any, next: any) => {
         if (req.url === "/manifest.json") {
           try {
-            const manifestPath = path.resolve(__dirname, "public/manifest.json");
+            const manifestPath = path.resolve(
+              __dirname,
+              "public/manifest.json",
+            );
             const manifestStr = await fs.readFile(manifestPath, "utf-8");
             const manifest = JSON.parse(manifestStr);
 
@@ -61,4 +64,3 @@ export default defineConfig({
     },
   },
 });
-
