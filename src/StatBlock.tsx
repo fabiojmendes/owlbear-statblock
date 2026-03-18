@@ -407,11 +407,9 @@ function StatBlock() {
                         ? `(${monster.legendaryActionsLair} in Lair)`
                         : ""}
                       . Immediately after another creature’s turn,{" "}
-                      {monster.name}
-                      can expend a use to take one of the following actions.{" "}
-                      {monster.name}
-                      regains all expended uses at the start of each of its
-                      turns.
+                      {monster.name} can expend a use to take one of the
+                      following actions. {monster.name} regains all expended
+                      uses at the start of each of its turns.
                     </em>
                   </p>
                   {renderTraits(monster.legendary)}
