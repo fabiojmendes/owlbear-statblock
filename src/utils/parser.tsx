@@ -2,7 +2,7 @@ import React from "react";
 import { handleD20RollClick, handleRollClick } from "./roll";
 
 // Regex to find 5etools style tags
-const tagRegex = /\{@([a-z]+)(?: ([^}]+))?\}/g;
+const tagRegex = /\{@([A-z]+)(?: ([^}]+))?\}/g;
 
 export function parseText(text: string): React.ReactNode[] {
   if (!text) return [];
@@ -126,6 +126,12 @@ export function parseText(text: string): React.ReactNode[] {
         elements.push(<em key={match.index}>{fullName}</em>);
         break;
       }
+      case "actSaveFail":
+        elements.push(<em key={match.index}>Failure:</em>);
+        break;
+      case "actSaveSuccess":
+        elements.push(<em key={match.index}>Success:</em>);
+        break;
       case "spell":
       case "item":
       case "condition":

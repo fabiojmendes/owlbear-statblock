@@ -142,7 +142,7 @@ function StatBlock() {
                     ) : item.name ? (
                       <>
                         <strong style={{ fontStyle: "italic" }}>
-                          {item.name}
+                          {parseText(item.name)}
                         </strong>{" "}
                         {parseText(item.entry)}
                       </>
