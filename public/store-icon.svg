@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Parchment Background -->
+  <rect x="40" y="40" width="432" height="432" rx="20" fill="#fdf1dc" stroke="#922610" stroke-width="8"/>
+  
+  <!-- Header Section -->
+  <rect x="60" y="70" width="300" height="30" rx="4" fill="#7a200d"/>
+  <rect x="60" y="110" width="200" height="15" rx="2" fill="#58180d" opacity="0.6"/>
+  
+  <!-- Separator Line -->
+  <path d="M 60 145 L 452 145" stroke="#922610" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Stat Grid Area -->
+  <rect x="60" y="165" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  <rect x="196" y="165" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  <rect x="332" y="165" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  
+  <rect x="60" y="235" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  <rect x="196" y="235" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  <rect x="332" y="235" width="120" height="60" rx="4" fill="#e0e5c1"/>
+  
+  <!-- Second Separator -->
+  <path d="M 60 315 L 452 315" stroke="#922610" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Action Section -->
+  <rect x="60" y="340" width="150" height="25" rx="4" fill="#7a200d"/>
+  <rect x="60" y="380" width="392" height="12" rx="2" fill="#58180d" opacity="0.4"/>
+  <rect x="60" y="405" width="392" height="12" rx="2" fill="#58180d" opacity="0.4"/>
+  <rect x="60" y="430" width="250" height="12" rx="2" fill="#58180d" opacity="0.4"/>
+</svg>
