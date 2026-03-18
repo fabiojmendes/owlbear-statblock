@@ -9,6 +9,7 @@
     "lint": "biome check src/",
     "format": "biome format --write src/",
     "preview": "vite preview",
+    "predeploy": "npm run build",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
