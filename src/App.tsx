@@ -11,7 +11,7 @@ function App() {
     OBR.popover.open({
       id: `${ID}/statblock`,
       url: "/statblock",
-      height: 500,
+      height: 550,
       width: 450,
       disableClickAway: true,
       anchorOrigin: { horizontal: "RIGHT", vertical: "TOP" },

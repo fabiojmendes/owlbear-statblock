@@ -400,7 +400,7 @@ function StatBlock() {
               {monster.legendary && (
                 <>
                   <h2 className="statblock-section-title">Legendary Actions</h2>
-                  <p>
+                  <div className="subtitle">
                     <em>
                       Legendary Action Uses: {monster.legendaryActions || 3}{" "}
                       {monster.legendaryActionsLair
@@ -411,7 +411,7 @@ function StatBlock() {
                       following actions. {monster.name} regains all expended
                       uses at the start of each of its turns.
                     </em>
-                  </p>
+                  </div>
                   {renderTraits(monster.legendary)}
                 </>
               )}
