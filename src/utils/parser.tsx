@@ -112,6 +112,20 @@ export function parseText(text: string): React.ReactNode[] {
         );
         break;
       }
+      case "actSave": {
+        const saveMap: Record<string, string> = {
+          str: "Strength Saving Throw",
+          dex: "Dexterity Saving Throw",
+          con: "Constitution Saving Throw",
+          int: "Intelligence Saving Throw",
+          wis: "Wisdom Saving Throw",
+          cha: "Charisma Saving Throw",
+        };
+        const fullName =
+          saveMap[mainValue.toLowerCase()] || `${mainValue} Saving Throw`;
+        elements.push(<em key={match.index}>{fullName}</em>);
+        break;
+      }
       case "spell":
       case "item":
       case "condition":
