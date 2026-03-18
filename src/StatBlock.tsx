@@ -400,6 +400,20 @@ function StatBlock() {
               {monster.legendary && (
                 <>
                   <h2 className="statblock-section-title">Legendary Actions</h2>
+                  <p>
+                    <em>
+                      Legendary Action Uses: {monster.legendaryActions || 3}{" "}
+                      {monster.legendaryActionsLair
+                        ? `(${monster.legendaryActionsLair} in Lair)`
+                        : ""}
+                      . Immediately after another creature’s turn,{" "}
+                      {monster.name}
+                      can expend a use to take one of the following actions.{" "}
+                      {monster.name}
+                      regains all expended uses at the start of each of its
+                      turns.
+                    </em>
+                  </p>
                   {renderTraits(monster.legendary)}
                 </>
               )}
