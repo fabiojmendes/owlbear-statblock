@@ -94,9 +94,24 @@ export function parseText(text: string): React.ReactNode[] {
       case "dc":
         elements.push(`DC ${mainValue}`);
         break;
-      case "recharge":
-        elements.push(`(Recharge ${mainValue ? `${mainValue}-6` : "6"})`);
+      case "recharge": {
+        const rechargeVal = mainValue || "6";
+        const range = rechargeVal === "6" ? "6" : `${rechargeVal}-6`;
+        elements.push(
+          <span key={match.index}>
+            (Recharge{" "}
+            <button
+              type="button"
+              className="rollable"
+              onClick={() => handleRollClick("1d6")}
+            >
+              {range}
+            </button>
+            )
+          </span>,
+        );
         break;
+      }
       case "spell":
       case "item":
       case "condition":

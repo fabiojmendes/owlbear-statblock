@@ -124,7 +124,9 @@ function StatBlock() {
     return traits.map((trait, idx) => (
       <div key={idx} className="statblock-trait">
         {trait.name && (
-          <span className="statblock-trait-name">{trait.name}. </span>
+          <span className="statblock-trait-name">
+            {parseText(trait.name)}.{" "}
+          </span>
         )}
         {trait.entries?.map((entry: any, i: number) => {
           if (typeof entry === "string") {
