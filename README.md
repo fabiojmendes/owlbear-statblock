@@ -78,15 +78,11 @@ Built with a focus on performance and developer experience:
    ```bash
    npm run dev
    ```
-3. **Bestiary Update**: Fetch latest D&D Beyond links
-   ```bash
-   node scripts/dndbeyond-sync.mjs
-   ```
-4. **Quality Control**: Formatting, linting and import sorting
+3. **Quality Control**: Formatting, linting and import sorting
    ```bash
    npm run check
    ```
-5. **Production Build**:
+4. **Production Build**:
    ```bash
    npm run build
    ```
