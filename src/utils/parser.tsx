@@ -1,7 +1,7 @@
 import React from "react";
 import { handleD20RollClick, handleRollClick } from "./roll";
 
-// Regex to find 5etools style tags
+// Regex to find bestiary-formatted tags
 const tagRegex = /\{@([A-z]+)(?: ([^}]+))?\}/g;
 
 export function parseText(text: string): React.ReactNode[] {

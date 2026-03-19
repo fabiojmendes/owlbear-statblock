@@ -26,21 +26,32 @@ layout, modern 2024 styling, and powerful interactive rolling capabilities.
     while scrolling.
   - **Minimize/Expand**: Quickly collapse the stat block to just the header to
     save screen space.
-  - **5etools Integration**: The monster name links directly to its full entry
-    on [5etools](https://5etools.juzam.pro/).
+  - **D&D Beyond Integration**: The monster name links directly to its full
+    entry on [D&D Beyond](https://www.dndbeyond.com/) when available.
 - **Security**: Access is restricted to the **GM role only** to prevent players
   from seeing monster statistics.
 - **Multi-Source Data**: Automatically loads and caches monster data from
-  multiple JSON bestiaries (5etools compatible).
+  multiple JSON bestiaries.
 
 ## How to Use
 
-1. **Select a Token**: Select a single monster token on your Owlbear Rodeo
-   scene.
-2. **Open the Extension**: Click the Statblock icon in the Owlbear Rodeo
-   toolbar.
-3. **Interact**: The stat block renders instantly for recognized monsters. Use
-   keyboard modifiers (Shift/Ctrl) for quick advantage/disadvantage rolls.
+1. **Upload a Token**: Upload a monster token to Owlbear Rodeo with a name
+   matching a monster in the database. Refer to
+   [./docs/MONSTERS.md](MONSTERS.md) for a full reference of supported monster
+   names.
+2. **Open the Extension**: Open the Statblock extension from the Owlbear Rodeo
+   extension menu and click the **Show** button.
+3. **Select a Token**: Select a single monster token on your scene to instantly
+   visualize its stats.
+
+## Integrations
+
+- **[Dice+](https://extensions.owlbear.rodeo/dice-plus)**: All rolls made within
+  the stat block are sent directly to the Dice+ extension for a shared rolling
+  experience.
+- **[Battle Board](https://extensions.owlbear.rodeo/battle-board)**: Integrates
+  with the Battle Board extension to automate initiative rolls, AC, and hit
+  points.
 
 ## Technical Details
 
@@ -49,8 +60,10 @@ Built with a focus on performance and developer experience:
 - **React + TypeScript**: Type-safe component architecture.
 - **Custom Vite Plugin**: Automatically syncs `manifest.json` versions with
   `package.json` and appends a `(DEV)` flag during local development.
-- **Custom 5etools Parser**: Robust regex-based parser handling complex tags
-  like `{@hit}`, `{@damage}`, `{@recharge}`, `{@actSave}`, and more.
+- **Custom Tag Parser**: Robust regex-based parser handling complex tags like
+  `{@hit}`, `{@damage}`, `{@recharge}`, `{@actSave}`, and more.
+- **D&D Beyond Sync**: Includes a specialized Node.js scraper script
+  (`scripts/dndbeyond-sync.mjs`) to keep the bestiary's external links updated.
 - **Battle Board Integration**: Includes hooks for initializing combat and
   syncing metadata with the Battle Board extension.
 
@@ -64,14 +77,26 @@ Built with a focus on performance and developer experience:
    ```bash
    npm run dev
    ```
-3. **Quality Control**: Formatting, linting and import sorting
+3. **Bestiary Update**: Fetch latest D&D Beyond links
+   ```bash
+   node scripts/dndbeyond-sync.mjs
+   ```
+4. **Quality Control**: Formatting, linting and import sorting
    ```bash
    npm run check
    ```
-4. **Production Build**:
+5. **Production Build**:
    ```bash
    npm run build
    ```
+
+## Legal
+
+This work includes material from the System Reference Document 5.2.1 (“SRD
+5.2.1”) by Wizards of the Coast LLC, available at
+<https://www.dndbeyond.com/srd>. The SRD 5.2.1 is licensed under the Creative
+Commons Attribution 4.0 International License, available at
+<https://creativecommons.org/licenses/by/4.0/legalcode>.
 
 ## License
 

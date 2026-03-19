@@ -198,13 +198,17 @@ function StatBlock() {
         <div className="statblock-header">
           <h1>
             {monster ? (
-              <a
-                href={`https://5etools.juzam.pro/bestiary.html#${encodeURIComponent(monster.name.toLowerCase())}_${monster.source.toLowerCase()}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {monster.name}
-              </a>
+              monster.externalLink ? (
+                <a
+                  href={monster.externalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {monster.name}
+                </a>
+              ) : (
+                monster.name
+              )
             ) : (
               "Stat Block"
             )}
