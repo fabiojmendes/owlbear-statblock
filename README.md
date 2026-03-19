@@ -1,6 +1,6 @@
 # Owlbear Rodeo Statblock Extension
 
-A highly polished, interactive D&D 5e monster stat block renderer for
+Interactive D&D 5e monster stat block renderer for
 [Owlbear Rodeo](https://www.owlbear.rodeo/). This extension allows GMs to view
 detailed monster information directly within their VTT, featuring a classic 5e
 layout, modern 2024 styling, and powerful interactive rolling capabilities.
