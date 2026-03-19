@@ -1,8 +1,7 @@
 {
   "name": "Stat Blocks",
-  "version": "1.0.0",
   "manifest_version": 1,
-  "description": "Polished D&D 5e monster stat blocks with interactive rolls and advantage/disadvantage support for Owlbear Rodeo.",
+  "description": "Polished D&D 5e monster stat blocks with interactive rolls for Owlbear Rodeo.",
   "homepage_url": "https://github.com/fabiojmendes/owlbear-statblock",
   "icon": "/store-icon.svg",
   "action": {
