@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
     "check": "biome check --write src/",
     "preview": "vite preview",
+    "prebuild": "npm run check",
+    "build": "tsc -b && vite build",
     "predeploy": "npm run build",
     "deploy": "wrangler deploy"
   },
