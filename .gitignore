@@ -26,3 +26,4 @@ dist-ssr
 # Local data (optional: remove if you want to commit your bestiary files)
 /public/data/*.json
 !/public/data/index.json
+!/public/data/bestiary.json
