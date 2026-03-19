@@ -37,8 +37,9 @@ layout, modern 2024 styling, and powerful interactive rolling capabilities.
 
 1. **Upload a Token**: Upload a monster token to Owlbear Rodeo with a name
    matching a monster in the database. Refer to
-   [./docs/MONSTERS.md](MONSTERS.md) for a full reference of supported monster
-   names.
+   [MONSTERS.md](./docs/MONSTERS.md) for a full reference of supported monster
+   names. Sample [tokens](./docs/tokens/) are provided to illustrate this
+   process.
 2. **Open the Extension**: Open the Statblock extension from the Owlbear Rodeo
    extension menu and click the **Show** button.
 3. **Select a Token**: Select a single monster token on your scene to instantly
