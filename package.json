@@ -10,7 +10,7 @@
     "prebuild": "npm run check",
     "build": "tsc -b && vite build",
     "predeploy": "npm run build",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler versions upload --preview-alias $(git branch --show-current)"
   },
   "dependencies": {
     "@owlbear-rodeo/sdk": "^3.1.0",
