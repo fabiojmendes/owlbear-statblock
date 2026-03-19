@@ -4,9 +4,26 @@ import { ID } from "./main.tsx";
 import StatBlock from "./StatBlock.tsx";
 import { getInitiativeBonus } from "./utils/helpers.ts";
 
-function App() {
-  const dice = new Dice();
+const dice = new Dice();
 
+function rollInitiative(monster: any) {
+  const initBonus = getInitiativeBonus(monster);
+  let baseDice: string;
+  switch (monster.initiative?.advantageMode) {
+    case "adv":
+      baseDice = "2d20kh";
+      break;
+    case "dis":
+      baseDice = "2d20kl";
+      break;
+    default:
+      baseDice = "1d20";
+  }
+  const formula = `${baseDice}${initBonus >= 0 ? `+${initBonus}` : `${initBonus}`}`;
+  return dice.roll(formula).total;
+}
+
+function App() {
   const showStatblock = () => {
     OBR.popover.open({
       id: `${ID}/statblock`,
@@ -28,9 +45,7 @@ function App() {
           const battleBoard: any =
             item.metadata["com.missing-link-dev.battle-board/metadata"];
           return (
-            item.layer === "CHARACTER" &&
-            monster !== undefined &&
-            battleBoard?.inInitiative
+            item.layer === "CHARACTER" && monster && battleBoard?.inInitiative
           );
         } else {
           return false;
@@ -41,9 +56,8 @@ function App() {
           const monster: any = item.metadata[`${ID}/monster`];
           const battleBoard: any =
             item.metadata["com.missing-link-dev.battle-board/metadata"];
-          const initBonus = getInitiativeBonus(monster);
-          const formula = `1d20${initBonus >= 0 ? `+${initBonus}` : `${initBonus}`}`;
-          battleBoard.initiative = dice.roll(formula).total;
+
+          battleBoard.initiative = rollInitiative(monster);
 
           if (monster?.hp?.formula) {
             const hp = dice.roll(monster.hp.formula).total;
@@ -66,7 +80,8 @@ function App() {
 
   return (
     <section className="app-container">
-      <h1>StatBlock</h1>
+      <h2>StatBlock</h2>
+      <hr />
       <div className="button-group">
         <button className="action-button" type="button" onClick={showStatblock}>
           Show
