@@ -1,26 +1,13 @@
+import OBR from "@owlbear-rodeo/sdk";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import OBR from "@owlbear-rodeo/sdk";
 import App from "./App.tsx";
+import "./index.css";
 import { fetchBestiary } from "./utils/bestiary.ts";
 
 export const ID = "pro.juzam.statblock";
 
 OBR.onReady(async () => {
-  if ((await OBR.player.getRole()) !== "GM") {
-    const rootElement = document.getElementById("root");
-    if (rootElement) {
-      createRoot(rootElement).render(
-        <StrictMode>
-          <h1>StatBlock</h1>
-          <p>Only GMs have access to stat blocks</p>
-        </StrictMode>,
-      );
-    }
-    return;
-  }
-
   const monsterData = await fetchBestiary();
 
   OBR.scene.items.onChange((items) => {
@@ -40,11 +27,13 @@ OBR.onReady(async () => {
     });
   });
 
+  const isGM = (await OBR.player.getRole()) === "GM";
+
   const rootElement = document.getElementById("root");
   if (rootElement) {
     createRoot(rootElement).render(
       <StrictMode>
-        <App />
+        <App isGM={isGM} />
       </StrictMode>,
     );
   }

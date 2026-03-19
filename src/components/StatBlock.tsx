@@ -1,7 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
 
-import { ID } from "./main";
+import { ID } from "../main";
 import {
   formatAlignment,
   formatSize,
@@ -9,9 +9,9 @@ import {
   getModifier,
   getPassiveInitiative,
   getProficiencyBonus,
-} from "./utils/helpers";
-import { parseText } from "./utils/parser";
-import { handleD20RollClick } from "./utils/roll";
+} from "../utils/helpers";
+import { parseText } from "../utils/parser";
+import { handleD20RollClick } from "../utils/roll";
 
 import "./StatBlock.css";
 

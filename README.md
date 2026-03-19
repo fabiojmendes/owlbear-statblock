@@ -64,9 +64,9 @@ Built with a focus on performance and developer experience:
    ```bash
    npm run dev
    ```
-3. **Quality Control**:
+3. **Quality Control**: Formatting, linting and import sorting
    ```bash
-   npm run format && npm run lint
+   npm run check
    ```
 4. **Production Build**:
    ```bash

@@ -59,17 +59,14 @@ body {
   transition:
     background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 16px;
   border-color: var(--variant-outlinedBorder, currentColor);
 }
 
 .action-button:hover {
-  --variant-containedBg: rgb(130, 107, 178);
-  --variant-textBg: rgba(187, 153, 255, 0.08);
-  --variant-outlinedBorder: #bb99ff;
-  --variant-outlinedBg: rgba(187, 153, 255, 0.08);
-}
-
-.action-button:active {
+  text-decoration: none;
+  background-color: rgba(187, 153, 255, 0.08);
+  border: 1px solid rgb(187, 153, 255);
 }
