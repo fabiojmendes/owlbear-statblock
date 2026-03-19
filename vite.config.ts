@@ -24,8 +24,7 @@ function manifestPlugin() {
             const manifestStr = await fs.readFile(manifestPath, "utf-8");
             const manifest = JSON.parse(manifestStr);
 
-            manifest.version = pkg.version;
-            manifest.name = `${manifest.name} (DEV)`;
+            manifest.version = `${pkg.version}-dev`;
 
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(manifest, null, 2));
@@ -38,6 +37,7 @@ function manifestPlugin() {
         next();
       });
     },
+
     async writeBundle(options: any) {
       const outDir = options.dir || "dist";
       const manifestPath = path.resolve(outDir, "manifest.json");
