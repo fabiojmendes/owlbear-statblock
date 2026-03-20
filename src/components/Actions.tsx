@@ -1,5 +1,5 @@
 import { Button, Stack } from "@mui/material";
-import OBR, { isImage } from "@owlbear-rodeo/sdk";
+import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
 import { ID } from "../main.tsx";
 import { getInitiativeBonus } from "../utils/helpers.ts";
@@ -24,10 +24,10 @@ function rollInitiative(monster: any) {
 }
 
 function Actions() {
-  const showStatblock = () => {
+  const showStatblock = (itemId = "") => {
     OBR.popover.open({
       id: `${ID}/statblock`,
-      url: "/statblock",
+      url: `/statblock?id=${itemId}`,
       height: 550,
       width: 450,
       disableClickAway: true,
@@ -37,50 +37,52 @@ function Actions() {
     OBR.action.close();
   };
 
-  const startCombat = () => {
-    OBR.scene.items.updateItems(
-      (item) => {
-        if (isImage(item)) {
-          const monster: any = item.metadata[`${ID}/monster`];
-          const battleBoard: any =
-            item.metadata["com.missing-link-dev.battle-board/metadata"];
-          return (
-            item.layer === "CHARACTER" && monster && battleBoard?.inInitiative
-          );
-        } else {
-          return false;
-        }
-      },
-      (items) => {
-        for (const item of items) {
-          const monster: any = item.metadata[`${ID}/monster`];
-          const battleBoard: any =
-            item.metadata["com.missing-link-dev.battle-board/metadata"];
+  OBR.broadcast.onMessage(
+    "com.missing-link-dev.battle-board/item-added",
+    (event) => {
+      console.log(event.data);
+      if (typeof event.data === "string") {
+        OBR.scene.items.updateItems([event.data], (items) => {
+          for (const item of items) {
+            const monster: any = item.metadata[`${ID}/monster`];
+            const battleBoard: any =
+              item.metadata["com.missing-link-dev.battle-board/metadata"];
 
-          battleBoard.initiative = rollInitiative(monster);
+            if (
+              item.layer !== "CHARACTER" ||
+              !monster ||
+              !battleBoard?.inInitiative
+            ) {
+              continue;
+            }
 
-          if (monster?.hp?.formula) {
-            const hp = dice.roll(monster.hp.formula).total;
-            battleBoard.maxHP = hp;
-            battleBoard.currentHP = hp;
+            battleBoard.initiative = rollInitiative(monster);
+
+            if (monster?.hp?.formula) {
+              const hp = dice.roll(monster.hp.formula).total;
+              battleBoard.maxHP = hp;
+              battleBoard.currentHP = hp;
+            }
+            battleBoard.ac = monster.ac[0].ac || monster.ac[0];
           }
-          battleBoard.ac = monster.ac[0].ac || monster.ac[0];
-        }
-        OBR.notification.show(
-          `BattleBoard updated with ${items.length} items!`,
-        );
-      },
-    );
-    OBR.action.close();
-  };
+        });
+      }
+    },
+  );
+
+  OBR.broadcast.onMessage(
+    "com.missing-link-dev.battle-board/selected",
+    (event) => {
+      if (typeof event.data === "string") {
+        showStatblock(event.data);
+      }
+    },
+  );
 
   return (
     <Stack spacing={2}>
-      <Button variant="outlined" fullWidth onClick={showStatblock}>
+      <Button variant="outlined" fullWidth onClick={() => showStatblock()}>
         Show
-      </Button>
-      <Button variant="outlined" fullWidth onClick={startCombat}>
-        Start Combat!
       </Button>
     </Stack>
   );

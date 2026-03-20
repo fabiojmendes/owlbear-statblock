@@ -96,6 +96,23 @@ function StatBlock() {
   const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const itemId = params.get("id");
+    if (typeof itemId === "string" && itemId.length > 0) {
+      const getItem = async () => {
+        const items = await OBR.scene.items.getItems([itemId]);
+        if (items.length > 0) {
+          const m = items[0].metadata[`${ID}/monster`];
+          if (m) {
+            setMonster(m);
+          }
+        }
+      };
+      getItem();
+    }
+  }, []);
+
+  useEffect(() => {
     OBR.player.onChange(async (player) => {
       if (player.selection && player.selection.length === 1) {
         const items = await OBR.scene.items.getItems(player.selection);
@@ -103,12 +120,8 @@ function StatBlock() {
           const m = items[0].metadata[`${ID}/monster`];
           if (m) {
             setMonster(m);
-          } else {
-            setMonster(null);
           }
         }
-      } else {
-        setMonster(null);
       }
     });
   }, []);
