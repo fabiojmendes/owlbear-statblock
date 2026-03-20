@@ -52,7 +52,6 @@ function Actions() {
   };
 
   OBR.broadcast.onMessage(`${BATTLE_BOARD_ID}/item-added`, (event) => {
-    console.log(event.data);
     if (typeof event.data === "string") {
       OBR.scene.items.updateItems([event.data], (items) => {
         for (const item of items) {
