@@ -1,8 +1,13 @@
 import DeleteIcon from "@mui/icons-material/Delete";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import UploadIcon from "@mui/icons-material/Upload";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
+  Chip,
   Divider,
   IconButton,
   List,
@@ -11,18 +16,39 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import OBR from "@owlbear-rodeo/sdk";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { addPack, getPacks, type Pack, removePack } from "../utils/idb.ts";
+import { ID } from "../constants.ts";
+import {
+  addPack,
+  getPackMonsters,
+  getPacks,
+  type Pack,
+  removePack,
+} from "../utils/idb.ts";
 
 export default function CustomPacksModal() {
   const [packs, setPacks] = useState<Pack[]>([]);
+  const [packMonsters, setPackMonsters] = useState<Record<string, string[]>>(
+    {},
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClose = () => {
+    OBR.modal.close(`${ID}/packs`);
+  };
 
   const loadPacks = useCallback(async () => {
     const loadedPacks = await getPacks();
     setPacks(loadedPacks);
   }, []);
+
+  const loadMonsters = async (packId: string) => {
+    if (packMonsters[packId]) return;
+    const monsters = await getPackMonsters(packId);
+    setPackMonsters((prev) => ({ ...prev, [packId]: monsters }));
+  };
 
   useEffect(() => {
     loadPacks();
@@ -90,33 +116,90 @@ export default function CustomPacksModal() {
         />
       </Box>
       <Divider />
-      <List sx={{ flexGrow: 1, overflowY: "auto" }}>
+      <Box sx={{ flexGrow: 1, overflowY: "auto", p: 1 }}>
         {packs.length === 0 ? (
-          <ListItem>
-            <ListItemText primary="No custom packs uploaded." />
-          </ListItem>
+          <Typography
+            sx={{ p: 2, textAlign: "center", color: "text.secondary" }}
+          >
+            No custom packs uploaded.
+          </Typography>
         ) : (
           packs.map((pack) => (
-            <ListItem
+            <Accordion
               key={pack.id}
-              secondaryAction={
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => handleDelete(pack.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              }
+              onChange={(_, expanded) => expanded && loadMonsters(pack.id)}
+              variant="outlined"
+              sx={{ mb: 1 }}
             >
-              <ListItemText
-                primary={pack.name}
-                secondary={new Date(pack.importedAt).toLocaleString()}
-              />
-            </ListItem>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`pack-${pack.id}-content`}
+                id={`pack-${pack.id}-header`}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                    pr: 1,
+                  }}
+                >
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {pack.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {new Date(pack.importedAt).toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Chip
+                      label={`${pack.monsterCount || 0} monsters`}
+                      size="small"
+                      variant="outlined"
+                    />
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(pack.id);
+                      }}
+                      color="error"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0 }}>
+                <Divider />
+                <List dense sx={{ maxHeight: 200, overflowY: "auto" }}>
+                  {packMonsters[pack.id] ? (
+                    packMonsters[pack.id].map((name) => (
+                      <ListItem key={name}>
+                        <ListItemText primary={name} />
+                      </ListItem>
+                    ))
+                  ) : (
+                    <ListItem>
+                      <ListItemText primary="Loading monsters..." />
+                    </ListItem>
+                  )}
+                </List>
+              </AccordionDetails>
+            </Accordion>
           ))
         )}
-      </List>
+      </Box>
+      <Divider />
+      <Box sx={{ p: 2 }}>
+        <Button variant="outlined" fullWidth onClick={handleClose}>
+          Close
+        </Button>
+      </Box>
     </Paper>
   );
 }

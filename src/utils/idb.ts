@@ -4,11 +4,13 @@ export interface Pack {
   id: string;
   name: string;
   importedAt: number;
+  monsterCount: number;
 }
 
 export interface MonsterRecord {
   id: string;
   packId: string;
+  name: string;
   [key: string]: any;
 }
 
@@ -64,6 +66,7 @@ export async function addPack(file: File): Promise<void> {
     id: packId,
     name: file.name,
     importedAt: Date.now(),
+    monsterCount: monstersArray.length,
   };
 
   await tx.objectStore("packs").put(pack);
@@ -80,6 +83,13 @@ export async function addPack(file: File): Promise<void> {
   }
 
   await tx.done;
+}
+
+export async function getPackMonsters(packId: string): Promise<string[]> {
+  const db = await initDB();
+  const index = db.transaction("monsters").store.index("by-packId");
+  const monsters = await index.getAll(packId);
+  return monsters.map((m) => m.name).sort();
 }
 
 export async function removePack(packId: string): Promise<void> {

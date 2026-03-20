@@ -10,8 +10,8 @@ function App({ isGM = false }) {
     OBR.modal.open({
       id: `${ID}/packs`,
       url: `/packs.html`,
-      height: 400,
-      width: 350,
+      height: 600,
+      width: 500,
     });
   };
 
