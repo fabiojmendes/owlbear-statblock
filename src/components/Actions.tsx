@@ -75,7 +75,7 @@ function Actions() {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: "100%", maxWidth: 300, mx: "auto" }}>
+    <Stack spacing={2}>
       <Button variant="outlined" fullWidth onClick={showStatblock}>
         Show
       </Button>
