@@ -5,7 +5,6 @@ import { ID } from "../main.tsx";
 export async function handleD20RollClick(
   e: React.MouseEvent,
   bonus: number | string,
-  target: string = "everyone",
   rollType: string = "roll",
 ) {
   let baseDice = "1d20";
@@ -27,15 +26,17 @@ export async function handleD20RollClick(
   }
 
   const notation = `${baseDice}${formattedBonus}`;
-  return handleRollClick(notation, target, rollType);
+  return handleRollClick(notation, rollType);
 }
 
 export async function handleRollClick(
   notation: string,
-  target: string = "everyone",
   rollType: string = "roll",
 ) {
   if (!notation) return;
+
+  const rollTarget =
+    localStorage.getItem("statblock_roll_visibility") || "everyone";
 
   const rollId = `roll_${Date.now()}_${Math.random()
     .toString(36)
@@ -50,7 +51,7 @@ export async function handleRollClick(
       rollId,
       playerId,
       playerName,
-      rollTarget: target,
+      rollTarget,
       diceNotation: notation,
       showResults: true,
       timestamp: Date.now(),
