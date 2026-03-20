@@ -1,13 +1,8 @@
 import { Divider, Paper, Typography } from "@mui/material";
 import Actions from "./components/Actions.tsx";
-import StatBlock from "./components/StatBlock.tsx";
 import { OBRThemeProvider } from "./theme/OBRThemeProvider.tsx";
 
 function App({ isGM = false }) {
-  if (window.location.pathname === "/statblock") {
-    return <StatBlock />;
-  }
-
   return (
     <OBRThemeProvider>
       <Paper

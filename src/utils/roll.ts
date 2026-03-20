@@ -1,6 +1,6 @@
 import OBR from "@owlbear-rodeo/sdk";
 import type React from "react";
-import { ID } from "../main.tsx";
+import { DICE_PLUS_ID, ID } from "../constants.ts";
 
 export async function handleD20RollClick(
   e: React.MouseEvent,
@@ -46,7 +46,7 @@ export async function handleRollClick(
   const playerName = await OBR.player.getName();
 
   await OBR.broadcast.sendMessage(
-    "dice-plus/roll-request",
+    `${DICE_PLUS_ID}/roll-request`,
     {
       rollId,
       playerId,

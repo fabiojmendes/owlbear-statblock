@@ -1,7 +1,6 @@
 import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
-
-import { ID } from "../main";
+import { ID } from "../constants.ts";
 import {
   formatAlignment,
   formatSize,
@@ -12,7 +11,6 @@ import {
 } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
-
 import "./StatBlock.css";
 
 function formatAC(acData: any): string {

@@ -100,6 +100,24 @@ function dataIndexPlugin() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), manifestPlugin(), dataIndexPlugin()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        statblock: path.resolve(__dirname, "statblock.html"),
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes("@mui") || id.includes("@emotion")) {
+            return "mui";
+          }
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
   server: {
     cors: {
       origin: "https://www.owlbear.rodeo",
