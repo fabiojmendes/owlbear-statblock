@@ -1,8 +1,20 @@
-import { Divider, Paper, Typography } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Box, Divider, IconButton, Paper, Typography } from "@mui/material";
+import OBR from "@owlbear-rodeo/sdk";
 import Actions from "./components/Actions.tsx";
+import { ID } from "./constants.ts";
 import { OBRThemeProvider } from "./theme/OBRThemeProvider.tsx";
 
 function App({ isGM = false }) {
+  const openSettings = () => {
+    OBR.modal.open({
+      id: `${ID}/packs`,
+      url: `/packs.html`,
+      height: 400,
+      width: 350,
+    });
+  };
+
   return (
     <OBRThemeProvider>
       <Paper
@@ -16,9 +28,26 @@ function App({ isGM = false }) {
           overflow: "hidden",
         }}
       >
-        <Typography variant="h5" component="h2">
-          StatBlock
-        </Typography>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          position="relative"
+        >
+          <Typography variant="h5" component="h2" sx={{ flexGrow: 1 }}>
+            StatBlock
+          </Typography>
+          {isGM && (
+            <IconButton
+              size="small"
+              onClick={openSettings}
+              title="Manage Custom Packs"
+              sx={{ position: "absolute", right: 0 }}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
+        </Box>
         <Divider />
         {isGM ? (
           <Actions />

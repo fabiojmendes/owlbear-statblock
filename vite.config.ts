@@ -105,6 +105,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
         statblock: path.resolve(__dirname, "statblock.html"),
+        packs: path.resolve(__dirname, "packs.html"),
       },
       output: {
         manualChunks(id) {
