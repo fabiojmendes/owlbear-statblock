@@ -1,7 +1,19 @@
-import { Button, Stack } from "@mui/material";
+import PeopleIcon from "@mui/icons-material/People";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/material";
 import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
 import { useEffect } from "react";
+import { useRollVisibility } from "../hooks/useRollVisibility.ts";
 import { ID } from "../main.tsx";
 import { fetchBestiary } from "../utils/bestiary.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
@@ -51,6 +63,8 @@ async function backgroundTask() {
 }
 
 function Actions() {
+  const { rollVisibility, setRollVisibility } = useRollVisibility();
+
   useEffect(() => {
     backgroundTask();
   }, []);
@@ -112,6 +126,29 @@ function Actions() {
 
   return (
     <Stack spacing={2}>
+      <FormControl fullWidth variant="outlined" size="small">
+        <InputLabel id="roll-visibility-label">Roll Visibility</InputLabel>
+        <Select
+          labelId="roll-visibility-label"
+          id="roll-visibility-select"
+          value={rollVisibility}
+          label="Roll Visibility"
+          onChange={(e) => setRollVisibility(e.target.value)}
+        >
+          <MenuItem value="everyone">
+            <Box display="flex" alignItems="center" gap={1}>
+              <PeopleIcon fontSize="small" />
+              <Typography>Everyone</Typography>
+            </Box>
+          </MenuItem>
+          <MenuItem value="gm_only">
+            <Box display="flex" alignItems="center" gap={1}>
+              <VisibilityOffIcon fontSize="small" />
+              <Typography>GM Only</Typography>
+            </Box>
+          </MenuItem>
+        </Select>
+      </FormControl>
       <Button variant="outlined" fullWidth onClick={() => showStatblock()}>
         Show
       </Button>
