@@ -1,3 +1,4 @@
+import { Button, Stack } from "@mui/material";
 import OBR, { isImage } from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
 import { ID } from "../main.tsx";
@@ -74,18 +75,14 @@ function Actions() {
   };
 
   return (
-    <>
-      <div className="button-group">
-        <button className="action-button" type="button" onClick={showStatblock}>
-          Show
-        </button>
-      </div>
-      <div className="button-group">
-        <button className="action-button" type="button" onClick={startCombat}>
-          Start Combat!
-        </button>
-      </div>
-    </>
+    <Stack spacing={2} sx={{ width: "100%", maxWidth: 300, mx: "auto" }}>
+      <Button variant="outlined" fullWidth onClick={showStatblock}>
+        Show
+      </Button>
+      <Button variant="outlined" fullWidth onClick={startCombat}>
+        Start Combat!
+      </Button>
+    </Stack>
   );
 }
 
