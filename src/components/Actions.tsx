@@ -12,10 +12,8 @@ import {
 } from "@mui/material";
 import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
-import { useEffect } from "react";
+import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
-import { ID } from "../main.tsx";
-import { fetchBestiary } from "../utils/bestiary.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
 
 const dice = new Dice();
@@ -37,37 +35,8 @@ function rollInitiative(monster: any) {
   return dice.roll(formula).total;
 }
 
-/**
- * Load bestiary and populate tokens on update
- */
-async function backgroundTask() {
-  console.log("Read Monsters");
-  const monsterData = await fetchBestiary();
-
-  OBR.scene.items.onChange((items) => {
-    const characters = items.filter(
-      (item) =>
-        item.layer === "CHARACTER" &&
-        item.metadata[`${ID}/monster`] === undefined,
-    );
-
-    OBR.scene.items.updateItems(characters, (items) => {
-      for (const item of items) {
-        const monster = monsterData.get(item.name.toLowerCase());
-        if (monster) {
-          item.metadata[`${ID}/monster`] = monster;
-        }
-      }
-    });
-  });
-}
-
 function Actions() {
   const { rollVisibility, setRollVisibility } = useRollVisibility();
-
-  useEffect(() => {
-    backgroundTask();
-  }, []);
 
   const showStatblock = (itemId = "") => {
     OBR.popover.open({
@@ -82,47 +51,39 @@ function Actions() {
     OBR.action.close();
   };
 
-  OBR.broadcast.onMessage(
-    "com.missing-link-dev.battle-board/item-added",
-    (event) => {
-      console.log(event.data);
-      if (typeof event.data === "string") {
-        OBR.scene.items.updateItems([event.data], (items) => {
-          for (const item of items) {
-            const monster: any = item.metadata[`${ID}/monster`];
-            const battleBoard: any =
-              item.metadata["com.missing-link-dev.battle-board/metadata"];
+  OBR.broadcast.onMessage(`${BATTLE_BOARD_ID}/item-added`, (event) => {
+    if (typeof event.data === "string") {
+      OBR.scene.items.updateItems([event.data], (items) => {
+        for (const item of items) {
+          const monster: any = item.metadata[`${ID}/monster`];
+          const battleBoard: any = item.metadata[`${BATTLE_BOARD_ID}/metadata`];
 
-            if (
-              item.layer !== "CHARACTER" ||
-              !monster ||
-              !battleBoard?.inInitiative
-            ) {
-              continue;
-            }
-
-            battleBoard.initiative = rollInitiative(monster);
-
-            if (monster?.hp?.formula) {
-              const hp = dice.roll(monster.hp.formula).total;
-              battleBoard.maxHP = hp;
-              battleBoard.currentHP = hp;
-            }
-            battleBoard.ac = monster.ac[0].ac || monster.ac[0];
+          if (
+            item.layer !== "CHARACTER" ||
+            !monster ||
+            !battleBoard?.inInitiative
+          ) {
+            continue;
           }
-        });
-      }
-    },
-  );
 
-  OBR.broadcast.onMessage(
-    "com.missing-link-dev.battle-board/selected",
-    (event) => {
-      if (typeof event.data === "string") {
-        showStatblock(event.data);
-      }
-    },
-  );
+          battleBoard.initiative = rollInitiative(monster);
+
+          if (monster?.hp?.formula) {
+            const hp = dice.roll(monster.hp.formula).total;
+            battleBoard.maxHP = hp;
+            battleBoard.currentHP = hp;
+          }
+          battleBoard.ac = monster.ac[0].ac || monster.ac[0];
+        }
+      });
+    }
+  });
+
+  OBR.broadcast.onMessage(`${BATTLE_BOARD_ID}/selected`, (event) => {
+    if (typeof event.data === "string") {
+      showStatblock(event.data);
+    }
+  });
 
   return (
     <Stack spacing={2}>
