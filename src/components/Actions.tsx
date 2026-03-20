@@ -1,7 +1,9 @@
 import { Button, Stack } from "@mui/material";
 import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
+import { useEffect } from "react";
 import { ID } from "../main.tsx";
+import { fetchBestiary } from "../utils/bestiary.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
 
 const dice = new Dice();
@@ -23,7 +25,36 @@ function rollInitiative(monster: any) {
   return dice.roll(formula).total;
 }
 
+/**
+ * Load bestiary and populate tokens on update
+ */
+async function backgroundTask() {
+  console.log("Read Monsters");
+  const monsterData = await fetchBestiary();
+
+  OBR.scene.items.onChange((items) => {
+    const characters = items.filter(
+      (item) =>
+        item.layer === "CHARACTER" &&
+        item.metadata[`${ID}/monster`] === undefined,
+    );
+
+    OBR.scene.items.updateItems(characters, (items) => {
+      for (const item of items) {
+        const monster = monsterData.get(item.name.toLowerCase());
+        if (monster) {
+          item.metadata[`${ID}/monster`] = monster;
+        }
+      }
+    });
+  });
+}
+
 function Actions() {
+  useEffect(() => {
+    backgroundTask();
+  }, []);
+
   const showStatblock = (itemId = "") => {
     OBR.popover.open({
       id: `${ID}/statblock`,
