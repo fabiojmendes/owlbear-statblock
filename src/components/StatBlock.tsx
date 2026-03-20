@@ -114,14 +114,25 @@ function StatBlock() {
 
   useEffect(() => {
     OBR.player.onChange(async (player) => {
-      if (player.selection && player.selection.length === 1) {
-        const items = await OBR.scene.items.getItems(player.selection);
-        if (items.length > 0) {
-          const m = items[0].metadata[`${ID}/monster`];
-          if (m) {
-            setMonster(m);
-          }
+      if (!player.selection) {
+        return;
+      }
+
+      if (player.selection.length > 1) {
+        setMonster(null);
+        return;
+      }
+
+      const items = await OBR.scene.items.getItems(player.selection);
+      if (items.length > 0) {
+        const m = items[0].metadata[`${ID}/monster`];
+        if (m) {
+          setMonster(m);
+        } else {
+          setMonster(null);
         }
+      } else {
+        setMonster(null);
       }
     });
   }, []);
