@@ -79,6 +79,42 @@ export const MonsterSchema = z
     speed: SpeedSchema.optional(),
     cr: CRSchema.optional(),
     type: TypeSchema.optional(),
+    externalLink: z.string().optional(),
+    size: z.array(z.string()).optional(),
+    alignment: z.array(z.string()).optional(),
+    alignmentPrefix: z.string().optional(),
+    hp: z
+      .object({
+        average: z.number().optional(),
+        formula: z.string().optional(),
+      })
+      .optional(),
+    str: z.number().optional(),
+    dex: z.number().optional(),
+    con: z.number().optional(),
+    int: z.number().optional(),
+    wis: z.number().optional(),
+    cha: z.number().optional(),
+    save: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+    skill: z.record(z.string(), z.string()).optional(),
+    vulnerable: z.array(z.string()).optional(),
+    resist: z.array(z.string()).optional(),
+    immune: z.array(z.string()).optional(),
+    conditionImmune: z.array(z.string()).optional(),
+    senses: z.array(z.string()).optional(),
+    passive: z.number().optional(),
+    languages: z.array(z.string()).optional(),
+    trait: z.array(z.any()).optional(),
+    action: z.array(z.any()).optional(),
+    bonus: z.array(z.any()).optional(),
+    reaction: z.array(z.any()).optional(),
+    legendary: z.array(z.any()).optional(),
+    spellcasting: z.array(z.any()).optional(),
+    legendaryActions: z.number().optional(),
+    legendaryActionsLair: z.number().optional(),
+    initiative: z.any().optional(),
     // Ensure we keep the rest intact so other components that rely on them don't break
   })
   .passthrough();
+
+export type Monster = z.infer<typeof MonsterSchema>;

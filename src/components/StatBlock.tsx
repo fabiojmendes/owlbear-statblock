@@ -11,7 +11,7 @@ import {
 } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
-import { MonsterSchema } from "../utils/schema";
+import { type Monster, MonsterSchema } from "../utils/schema";
 import "./StatBlock.css";
 
 function formatAC(acData: any): React.ReactNode {
@@ -56,7 +56,7 @@ function renderProperty(
 }
 
 function StatBlock() {
-  const [monster, setMonster] = useState<any>(null);
+  const [monster, setMonster] = useState<Monster | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function StatBlock() {
               setMonster(MonsterSchema.parse(m));
             } catch (e) {
               console.error("Zod parsing failed:", e);
-              setMonster(m);
+              setMonster(m as Monster);
             }
           }
         }
@@ -100,7 +100,7 @@ function StatBlock() {
             setMonster(MonsterSchema.parse(m));
           } catch (e) {
             console.error("Zod parsing failed:", e);
-            setMonster(m);
+            setMonster(m as Monster);
           }
         } else {
           setMonster(null);
@@ -237,9 +237,8 @@ function StatBlock() {
           ) : (
             <>
               <div className="subtitle">
-                {formatSize(monster.size || ["M"])}{" "}
-                {monster.type?.type || monster.type}
-                {monster.type?.tags?.length > 0
+                {formatSize(monster.size || ["M"])} {monster.type?.type}
+                {monster.type?.tags && monster.type.tags.length > 0
                   ? ` (${monster.type.tags.join(", ")})`
                   : ""}
                 {monster.alignment
@@ -285,7 +284,7 @@ function StatBlock() {
                   { name: "wis", label: "WIS" },
                   { name: "cha", label: "CHA" },
                 ].map((stat) => {
-                  const score = monster[stat.name] || 10;
+                  const score = Number((monster as any)[stat.name]) || 10;
                   const mod = getModifier(score);
                   const save = monster.save?.[stat.name] || mod;
                   return (

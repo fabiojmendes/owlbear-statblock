@@ -15,11 +15,11 @@ import { Dice } from "dice-typescript";
 import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
-import { MonsterSchema } from "../utils/schema";
+import { type Monster, MonsterSchema } from "../utils/schema";
 
 const dice = new Dice();
 
-function rollInitiative(monster: any) {
+function rollInitiative(monster: Monster | any) {
   const initBonus = getInitiativeBonus(monster);
   let baseDice: string;
   switch (monster.initiative?.advantageMode) {
@@ -56,7 +56,7 @@ function Actions() {
     if (typeof event.data === "string") {
       OBR.scene.items.updateItems([event.data], (items) => {
         for (const item of items) {
-          const rawMonster: any = item.metadata[`${ID}/monster`];
+          const rawMonster: unknown = item.metadata[`${ID}/monster`];
           const battleBoard: any = item.metadata[`${BATTLE_BOARD_ID}/metadata`];
 
           if (
@@ -67,7 +67,7 @@ function Actions() {
             continue;
           }
 
-          let monster: any;
+          let monster: Monster | any;
           try {
             monster = MonsterSchema.parse(rawMonster);
           } catch (e) {
