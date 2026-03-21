@@ -60,7 +60,7 @@ function applyMods(base: any, mods: any) {
 
   for (const [prop, modConfig] of Object.entries(mods)) {
     const configs = Array.isArray(modConfig) ? modConfig : [modConfig];
-    
+
     for (const config of configs) {
       if (config?.mode) {
         switch (config.mode) {
@@ -135,8 +135,8 @@ function recursiveReplace(
   flags?: string,
 ): any {
   if (typeof obj === "string") {
-    // Escape regex special characters if we want literal match, 
-    // but 5eTools often expects regex patterns.
+    // Escape regex special characters if we want literal match,
+    // but regex patterns are often expected.
     try {
       const regex = new RegExp(replace, flags || "g");
       return obj.replace(regex, withStr);
