@@ -19,6 +19,7 @@
     "@mui/material": "^7.3.9",
     "@owlbear-rodeo/sdk": "^3.1.0",
     "dice-typescript": "^1.6.1",
+    "idb": "^8.0.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

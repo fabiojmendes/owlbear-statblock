@@ -32,7 +32,7 @@ export function OBRThemeProvider({ children }: OBRThemeProviderProps) {
             text: obrTheme.text,
             primary: obrTheme.primary,
             secondary: obrTheme.secondary,
-            background: obrTheme?.background,
+            background: obrTheme.background,
           }
         : undefined,
       shape: {
