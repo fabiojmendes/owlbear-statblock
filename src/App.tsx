@@ -1,5 +1,11 @@
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Box, Divider, IconButton, Paper, Typography } from "@mui/material";
+import {
+  CardHeader,
+  Divider,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import OBR from "@owlbear-rodeo/sdk";
 import Actions from "./components/Actions.tsx";
 import { ID } from "./constants.ts";
@@ -18,41 +24,45 @@ function App({ isGM = false }) {
   return (
     <OBRThemeProvider>
       <Paper
+        elevation={0}
         sx={{
           p: 2,
           display: "flex",
           flexDirection: "column",
-          gap: 2,
-          textAlign: "center",
+          gap: 1,
           height: "100vh",
           overflow: "hidden",
+          backgroundColor: "transparent",
         }}
       >
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          position="relative"
-        >
-          <Typography variant="h5" component="h2" sx={{ flexGrow: 1 }}>
-            StatBlock
-          </Typography>
-          {isGM && (
-            <IconButton
-              size="small"
-              onClick={openSettings}
-              title="Manage Custom Packs"
-              sx={{ position: "absolute", right: 0 }}
-            >
-              <SettingsIcon />
-            </IconButton>
-          )}
-        </Box>
-        <Divider />
+        <CardHeader
+          sx={{ p: 0 }}
+          title="StatBlock"
+          slotProps={{
+            title: {
+              variant: "h6",
+              textAlign: "left",
+              fontWeight: 600,
+              letterSpacing: "0.02em",
+            },
+          }}
+          action={
+            isGM && (
+              <IconButton
+                size="medium"
+                onClick={openSettings}
+                title="Manage Custom Packs"
+              >
+                <SettingsIcon />
+              </IconButton>
+            )
+          }
+        />
+        <Divider variant="middle" sx={{ mb: 1 }} />
         {isGM ? (
           <Actions />
         ) : (
-          <Typography variant="body1">
+          <Typography variant="body1" textAlign="center">
             Only GMs have access to stat blocks
           </Typography>
         )}
