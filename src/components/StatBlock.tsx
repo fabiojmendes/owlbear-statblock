@@ -11,10 +11,10 @@ import {
 } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
-import { type Monster, MonsterSchema } from "../utils/schema";
+import type { AC, Monster, Speed } from "../utils/schema";
 import "./StatBlock.css";
 
-function formatAC(acData: any): React.ReactNode {
+function formatAC(acData: AC | undefined): React.ReactNode {
   if (!acData || !Array.isArray(acData)) return "";
   return acData.map((item: any, index: number) => (
     <span key={index}>
@@ -25,7 +25,7 @@ function formatAC(acData: any): React.ReactNode {
   ));
 }
 
-function formatSpeed(speedData: any): React.ReactNode {
+function formatSpeed(speedData: Speed | undefined): React.ReactNode {
   if (!speedData || !Array.isArray(speedData)) return "0 ft.";
   return speedData.map((item: any, index: number) => (
     <span key={index}>
@@ -68,12 +68,7 @@ function StatBlock() {
         if (items.length > 0) {
           const m = items[0].metadata[`${ID}/monster`];
           if (m) {
-            try {
-              setMonster(MonsterSchema.parse(m));
-            } catch (e) {
-              console.error("Zod parsing failed:", e);
-              setMonster(m as Monster);
-            }
+            setMonster(m as Monster);
           }
         }
       };
@@ -96,12 +91,7 @@ function StatBlock() {
       if (items.length > 0) {
         const m = items[0].metadata[`${ID}/monster`];
         if (m) {
-          try {
-            setMonster(MonsterSchema.parse(m));
-          } catch (e) {
-            console.error("Zod parsing failed:", e);
-            setMonster(m as Monster);
-          }
+          setMonster(m as Monster);
         } else {
           setMonster(null);
         }

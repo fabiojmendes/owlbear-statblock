@@ -15,11 +15,11 @@ import { Dice } from "dice-typescript";
 import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
-import { type Monster, MonsterSchema } from "../utils/schema";
+import type { Monster } from "../utils/schema";
 
 const dice = new Dice();
 
-function rollInitiative(monster: Monster | any) {
+function rollInitiative(monster: Monster) {
   const initBonus = getInitiativeBonus(monster);
   let baseDice: string;
   switch (monster.initiative?.advantageMode) {
@@ -56,7 +56,7 @@ function Actions() {
     if (typeof event.data === "string") {
       OBR.scene.items.updateItems([event.data], (items) => {
         for (const item of items) {
-          const rawMonster: unknown = item.metadata[`${ID}/monster`];
+          const rawMonster = item.metadata[`${ID}/monster`];
           const battleBoard: any = item.metadata[`${BATTLE_BOARD_ID}/metadata`];
 
           if (
@@ -67,13 +67,7 @@ function Actions() {
             continue;
           }
 
-          let monster: Monster | any;
-          try {
-            monster = MonsterSchema.parse(rawMonster);
-          } catch (e) {
-            console.error("Zod parsing failed in Actions:", e);
-            monster = rawMonster;
-          }
+          const monster = rawMonster as Monster;
 
           battleBoard.initiative = rollInitiative(monster);
 
@@ -82,11 +76,9 @@ function Actions() {
             battleBoard.maxHP = hp;
             battleBoard.currentHP = hp;
           }
-          battleBoard.ac =
-            monster.ac?.[0]?.value ??
-            monster.ac?.[0]?.ac ??
-            monster.ac?.[0] ??
-            10;
+          if (monster?.ac?.[0]?.value) {
+            battleBoard.ac = monster.ac[0].value;
+          }
         }
       });
     }
