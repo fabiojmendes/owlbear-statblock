@@ -15,7 +15,7 @@ function App({ isGM = false }) {
   const openSettings = () => {
     OBR.modal.open({
       id: `${ID}/packs`,
-      url: `/packs.html`,
+      url: `/packs`,
       height: 600,
       width: 500,
     });

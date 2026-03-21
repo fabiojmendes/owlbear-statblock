@@ -26,6 +26,7 @@ function manifestPlugin() {
             const manifest = JSON.parse(manifestStr);
 
             manifest.version = `${pkg.version}-dev`;
+            manifest.name = `${manifest.name} (DEV)`;
 
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(manifest, null, 2));
@@ -56,50 +57,9 @@ function manifestPlugin() {
   };
 }
 
-function dataIndexPlugin() {
-  const dataDirPath = path.resolve(__dirname, "public/data");
-
-  async function getJsonFiles() {
-    try {
-      const files = await fs.readdir(dataDirPath);
-      return files.filter((f) => f.endsWith(".json"));
-    } catch (e) {
-      console.error("Failed to read data directory", e);
-      return [];
-    }
-  }
-
-  return {
-    name: "owlbear-data-index",
-    configureServer(server: any) {
-      server.middlewares.use(async (req: any, res: any, next: any) => {
-        if (req.url === "/data/index.json") {
-          const files = await getJsonFiles();
-          res.setHeader("Content-Type", "application/json");
-          res.end(JSON.stringify(files));
-          return;
-        }
-        next();
-      });
-    },
-
-    async writeBundle(options: any) {
-      const outDir = options.dir || "dist";
-      const indexPath = path.resolve(outDir, "data/index.json");
-      const files = await getJsonFiles();
-      try {
-        await fs.mkdir(path.dirname(indexPath), { recursive: true });
-        await fs.writeFile(indexPath, JSON.stringify(files));
-      } catch (e) {
-        console.error("Failed to write data index.json in build", e);
-      }
-    },
-  };
-}
-
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), manifestPlugin(), dataIndexPlugin()],
+  plugins: [react(), manifestPlugin()],
   build: {
     rollupOptions: {
       input: {
