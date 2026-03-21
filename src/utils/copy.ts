@@ -59,60 +59,101 @@ function applyMods(base: any, mods: any) {
   if (!mods || typeof mods !== "object") return;
 
   for (const [prop, modConfig] of Object.entries(mods)) {
-    const config = modConfig as any;
-    if (config?.mode) {
-      switch (config.mode) {
-        case "appendArr":
-          if (Array.isArray(base[prop])) {
-            if (Array.isArray(config.items)) {
-              base[prop].push(...config.items);
+    const configs = Array.isArray(modConfig) ? modConfig : [modConfig];
+    
+    for (const config of configs) {
+      if (config?.mode) {
+        switch (config.mode) {
+          case "appendArr":
+            if (Array.isArray(base[prop])) {
+              if (Array.isArray(config.items)) {
+                base[prop].push(...config.items);
+              } else {
+                base[prop].push(config.items);
+              }
             } else {
-              base[prop].push(config.items);
+              base[prop] = Array.isArray(config.items)
+                ? [...config.items]
+                : [config.items];
             }
-          } else {
-            // If it doesn't exist or isn't an array, just set it
+            break;
+          case "replaceArr":
             base[prop] = Array.isArray(config.items)
               ? [...config.items]
               : [config.items];
-          }
-          break;
-        case "replaceArr":
-          base[prop] = Array.isArray(config.items)
-            ? [...config.items]
-            : [config.items];
-          break;
-        case "removeArr":
-          if (Array.isArray(base[prop])) {
-            const itemsToRemove = Array.isArray(config.items)
-              ? config.items
-              : [config.items];
-            base[prop] = base[prop].filter((item: any) => {
-              // Basic matching. Usually removed by name.
-              const nameToMatch =
-                typeof item === "object" && item.name ? item.name : item;
-              return !itemsToRemove.some((toRemove: any) => {
-                const removeName =
-                  typeof toRemove === "object" && toRemove.name
-                    ? toRemove.name
-                    : toRemove;
-                return nameToMatch === removeName;
+            break;
+          case "removeArr":
+            if (Array.isArray(base[prop])) {
+              const itemsToRemove = Array.isArray(config.items)
+                ? config.items
+                : [config.items];
+              base[prop] = base[prop].filter((item: any) => {
+                const nameToMatch =
+                  typeof item === "object" && item.name ? item.name : item;
+                return !itemsToRemove.some((toRemove: any) => {
+                  const removeName =
+                    typeof toRemove === "object" && toRemove.name
+                      ? toRemove.name
+                      : toRemove;
+                  return nameToMatch === removeName;
+                });
               });
-            });
-          }
-          break;
-        case "scalarAdd":
-          if (typeof base[prop] === "number") {
-            base[prop] += Number(config.scalar) || 0;
-          }
-          break;
-        case "scalarMult":
-          if (typeof base[prop] === "number") {
-            base[prop] *= Number(config.scalar) || 1;
-          }
-          break;
-        default:
-          console.warn(`Unsupported _mod mode: ${config.mode}`);
+            }
+            break;
+          case "scalarAdd":
+            if (typeof base[prop] === "number") {
+              base[prop] += Number(config.scalar) || 0;
+            }
+            break;
+          case "scalarMult":
+            if (typeof base[prop] === "number") {
+              base[prop] *= Number(config.scalar) || 1;
+            }
+            break;
+          case "replaceTxt":
+            if (config.replace !== undefined && config.with !== undefined) {
+              base[prop] = recursiveReplace(
+                base[prop],
+                config.replace,
+                config.with,
+                config.flags,
+              );
+            }
+            break;
+          default:
+            console.warn(`Unsupported _mod mode: ${config.mode}`);
+        }
       }
     }
   }
+}
+
+function recursiveReplace(
+  obj: any,
+  replace: string,
+  withStr: string,
+  flags?: string,
+): any {
+  if (typeof obj === "string") {
+    // Escape regex special characters if we want literal match, 
+    // but 5eTools often expects regex patterns.
+    try {
+      const regex = new RegExp(replace, flags || "g");
+      return obj.replace(regex, withStr);
+    } catch (e) {
+      console.warn(`Invalid regex in replaceTxt: ${replace}`, e);
+      return obj;
+    }
+  }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => recursiveReplace(item, replace, withStr, flags));
+  }
+  if (obj !== null && typeof obj === "object") {
+    const newObj: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      newObj[key] = recursiveReplace(value, replace, withStr, flags);
+    }
+    return newObj;
+  }
+  return obj;
 }
