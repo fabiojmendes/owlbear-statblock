@@ -70,12 +70,11 @@ function Actions() {
 
           battleBoard.initiative = rollInitiative(monster);
 
-          if (monster?.hp?.formula) {
-            const hp = dice.roll(monster.hp.formula).total;
-            battleBoard.maxHP = hp;
-            battleBoard.currentHP = hp;
-          }
-          if (monster?.ac?.[0]?.value) {
+          const hp = dice.roll(monster.hp.formula).total;
+          battleBoard.maxHP = hp;
+          battleBoard.currentHP = hp;
+
+          if (monster.ac[0]?.value) {
             battleBoard.ac = monster.ac[0].value;
           }
         }
