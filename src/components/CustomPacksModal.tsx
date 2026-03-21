@@ -35,7 +35,7 @@ export default function CustomPacksModal() {
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleClose = () => {
+  const handleDone = () => {
     OBR.modal.close(`${ID}/packs`);
   };
 
@@ -196,8 +196,8 @@ export default function CustomPacksModal() {
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>
-        <Button variant="outlined" fullWidth onClick={handleClose}>
-          Close
+        <Button variant="outlined" fullWidth onClick={handleDone}>
+          Done
         </Button>
       </Box>
     </Paper>

@@ -24,7 +24,6 @@ function App({ isGM = false }) {
   return (
     <OBRThemeProvider>
       <Paper
-        elevation={0}
         sx={{
           p: 2,
           display: "flex",
@@ -32,7 +31,6 @@ function App({ isGM = false }) {
           gap: 1,
           height: "100vh",
           overflow: "hidden",
-          backgroundColor: "transparent",
         }}
       >
         <CardHeader
@@ -58,7 +56,7 @@ function App({ isGM = false }) {
             )
           }
         />
-        <Divider variant="middle" sx={{ mb: 1 }} />
+        <Divider variant="fullWidth" sx={{ mb: 1 }} />
         {isGM ? (
           <Actions />
         ) : (
