@@ -30,6 +30,15 @@ layout, modern 2024 styling, and powerful interactive rolling capabilities.
     entry on [D&D Beyond](https://www.dndbeyond.com/) when available.
 - **Security**: Access is restricted to the **GM role only** to prevent players
   from seeing monster statistics.
+- **Custom Monster Definitions**:
+  - **Upload Your Own**: Import JSON monster packs to expand your bestiary
+    beyond the built-in SRD.
+  - **Pack Management**: A dedicated management interface to view monster
+    counts, inspect names within a pack, and delete packs.
+  - **Local Storage**: Securely persists your data in the browser using
+    IndexedDB—no external database required.
+  - **Priority Lookup**: Custom monsters automatically take precedence over the
+    default bestiary if they share the same name.
 - **Multi-Source Data**: Automatically loads and caches monster data from
   multiple JSON bestiaries.
 
@@ -44,6 +53,8 @@ layout, modern 2024 styling, and powerful interactive rolling capabilities.
    extension menu and click the **Show** button.
 3. **Select a Token**: Select a single monster token on your scene to instantly
    visualize its stats.
+4. **Manage Custom Monsters**: Click the **Settings (cog)** icon in the header
+   to upload or manage your own monster packs.
 
 ## Integrations
 
@@ -59,8 +70,8 @@ layout, modern 2024 styling, and powerful interactive rolling capabilities.
 Built with a focus on performance and developer experience:
 
 - **React + TypeScript**: Type-safe component architecture.
-- **Custom Vite Plugin**: Automatically syncs `manifest.json` versions with
-  `package.json` and appends a `(DEV)` flag during local development.
+- **IndexedDB Persistence**: Uses the `idb` library for robust, promise-based
+  local storage of custom bestiary data.
 - **Custom Tag Parser**: Robust regex-based parser handling complex tags like
   `{@hit}`, `{@damage}`, `{@recharge}`, `{@actSave}`, and more.
 - **D&D Beyond Sync**: Includes a specialized Node.js scraper script
