@@ -14,13 +14,12 @@ import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
 import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
-import { getInitiativeBonus } from "../utils/helpers.ts";
 import type { Monster } from "../utils/schema";
 
 const dice = new Dice();
 
 function rollInitiative(monster: Monster) {
-  const initBonus = getInitiativeBonus(monster);
+  const initBonus = monster.initBonus;
   let baseDice: string;
   switch (monster.initiative?.advantageMode) {
     case "adv":

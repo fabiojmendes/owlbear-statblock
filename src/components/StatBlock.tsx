@@ -1,14 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
 import { ID } from "../constants.ts";
-import {
-  formatAlignment,
-  formatSize,
-  getInitiativeBonus,
-  getModifier,
-  getPassiveInitiative,
-  getProficiencyBonus,
-} from "../utils/helpers";
+import { getModifier } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
 import type { AC, Monster, Speed } from "../utils/schema";
@@ -227,12 +220,12 @@ function StatBlock() {
           ) : (
             <>
               <div className="subtitle">
-                {formatSize(monster.size || ["M"])} {monster.type?.type}
+                {monster.formattedSize} {monster.type?.type}
                 {monster.type?.tags && monster.type.tags.length > 0
                   ? ` (${monster.type.tags.join(", ")})`
                   : ""}
-                {monster.alignment
-                  ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
+                {monster.formattedAlignment
+                  ? `, ${monster.alignmentPrefix || ""}${monster.formattedAlignment}`
                   : ""}
               </div>
               <hr className="rule" />
@@ -244,16 +237,14 @@ function StatBlock() {
                   <button
                     type="button"
                     className="rollable"
-                    onClick={(e) =>
-                      handleD20RollClick(e, getInitiativeBonus(monster))
-                    }
+                    onClick={(e) => handleD20RollClick(e, monster.initBonus)}
                   >
                     {" "}
-                    {getInitiativeBonus(monster) >= 0
-                      ? `+${getInitiativeBonus(monster)}`
-                      : getInitiativeBonus(monster)}
+                    {monster.initBonus >= 0
+                      ? `+${monster.initBonus}`
+                      : monster.initBonus}
                   </button>
-                  {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
+                  {` (${monster.passiveInit})`}
                 </div>
               </div>
               {renderProperty(
@@ -347,7 +338,7 @@ function StatBlock() {
                 monster.cr ? (
                   <>
                     {monster.cr}
-                    {` (PB +${getProficiencyBonus(monster.cr)})`}
+                    {` (PB +${monster.pb})`}
                   </>
                 ) : null,
               )}
