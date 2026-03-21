@@ -47,10 +47,7 @@ describe("Bestiary JSON Integration Test", () => {
 
     for (const rawMonster of rawMonsters) {
       try {
-        // Apply the same preprocessing step as the runtime
         const resolved = await resolveMonster(rawMonster, mockGetMonsterByName);
-
-        // Validate against the Zod schema
         MonsterSchema.parse(resolved);
         passedCount++;
       } catch (e) {
