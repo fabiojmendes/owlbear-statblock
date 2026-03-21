@@ -59,69 +59,72 @@ function applyMods(base: any, mods: any) {
   if (!mods || typeof mods !== "object") return;
 
   for (const [prop, modConfig] of Object.entries(mods)) {
+    const targets = prop === "*" ? Object.keys(base) : [prop];
     const configs = Array.isArray(modConfig) ? modConfig : [modConfig];
 
-    for (const config of configs) {
-      if (config?.mode) {
-        switch (config.mode) {
-          case "appendArr":
-            if (Array.isArray(base[prop])) {
-              if (Array.isArray(config.items)) {
-                base[prop].push(...config.items);
+    for (const target of targets) {
+      for (const config of configs) {
+        if (config?.mode) {
+          switch (config.mode) {
+            case "appendArr":
+              if (Array.isArray(base[target])) {
+                if (Array.isArray(config.items)) {
+                  base[target].push(...config.items);
+                } else {
+                  base[target].push(config.items);
+                }
               } else {
-                base[prop].push(config.items);
+                base[target] = Array.isArray(config.items)
+                  ? [...config.items]
+                  : [config.items];
               }
-            } else {
-              base[prop] = Array.isArray(config.items)
+              break;
+            case "replaceArr":
+              base[target] = Array.isArray(config.items)
                 ? [...config.items]
                 : [config.items];
-            }
-            break;
-          case "replaceArr":
-            base[prop] = Array.isArray(config.items)
-              ? [...config.items]
-              : [config.items];
-            break;
-          case "removeArr":
-            if (Array.isArray(base[prop])) {
-              const itemsToRemove = Array.isArray(config.items)
-                ? config.items
-                : [config.items];
-              base[prop] = base[prop].filter((item: any) => {
-                const nameToMatch =
-                  typeof item === "object" && item.name ? item.name : item;
-                return !itemsToRemove.some((toRemove: any) => {
-                  const removeName =
-                    typeof toRemove === "object" && toRemove.name
-                      ? toRemove.name
-                      : toRemove;
-                  return nameToMatch === removeName;
+              break;
+            case "removeArr":
+              if (Array.isArray(base[target])) {
+                const itemsToRemove = Array.isArray(config.items)
+                  ? config.items
+                  : [config.items];
+                base[target] = base[target].filter((item: any) => {
+                  const nameToMatch =
+                    typeof item === "object" && item.name ? item.name : item;
+                  return !itemsToRemove.some((toRemove: any) => {
+                    const removeName =
+                      typeof toRemove === "object" && toRemove.name
+                        ? toRemove.name
+                        : toRemove;
+                    return nameToMatch === removeName;
+                  });
                 });
-              });
-            }
-            break;
-          case "scalarAdd":
-            if (typeof base[prop] === "number") {
-              base[prop] += Number(config.scalar) || 0;
-            }
-            break;
-          case "scalarMult":
-            if (typeof base[prop] === "number") {
-              base[prop] *= Number(config.scalar) || 1;
-            }
-            break;
-          case "replaceTxt":
-            if (config.replace !== undefined && config.with !== undefined) {
-              base[prop] = recursiveReplace(
-                base[prop],
-                config.replace,
-                config.with,
-                config.flags,
-              );
-            }
-            break;
-          default:
-            console.warn(`Unsupported _mod mode: ${config.mode}`);
+              }
+              break;
+            case "scalarAdd":
+              if (typeof base[target] === "number") {
+                base[target] += Number(config.scalar) || 0;
+              }
+              break;
+            case "scalarMult":
+              if (typeof base[target] === "number") {
+                base[target] *= Number(config.scalar) || 1;
+              }
+              break;
+            case "replaceTxt":
+              if (config.replace !== undefined && config.with !== undefined) {
+                base[target] = recursiveReplace(
+                  base[target],
+                  config.replace,
+                  config.with,
+                  config.flags,
+                );
+              }
+              break;
+            default:
+              console.warn(`Unsupported _mod mode: ${config.mode}`);
+          }
         }
       }
     }
