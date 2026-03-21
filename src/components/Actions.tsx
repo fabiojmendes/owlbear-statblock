@@ -15,6 +15,7 @@ import { Dice } from "dice-typescript";
 import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
 import { getInitiativeBonus } from "../utils/helpers.ts";
+import { MonsterSchema } from "../utils/schema";
 
 const dice = new Dice();
 
@@ -55,15 +56,23 @@ function Actions() {
     if (typeof event.data === "string") {
       OBR.scene.items.updateItems([event.data], (items) => {
         for (const item of items) {
-          const monster: any = item.metadata[`${ID}/monster`];
+          const rawMonster: any = item.metadata[`${ID}/monster`];
           const battleBoard: any = item.metadata[`${BATTLE_BOARD_ID}/metadata`];
 
           if (
             item.layer !== "CHARACTER" ||
-            !monster ||
+            !rawMonster ||
             !battleBoard?.inInitiative
           ) {
             continue;
+          }
+
+          let monster: any;
+          try {
+            monster = MonsterSchema.parse(rawMonster);
+          } catch (e) {
+            console.error("Zod parsing failed in Actions:", e);
+            monster = rawMonster;
           }
 
           battleBoard.initiative = rollInitiative(monster);
@@ -73,7 +82,11 @@ function Actions() {
             battleBoard.maxHP = hp;
             battleBoard.currentHP = hp;
           }
-          battleBoard.ac = monster.ac[0].ac || monster.ac[0];
+          battleBoard.ac =
+            monster.ac?.[0]?.value ??
+            monster.ac?.[0]?.ac ??
+            monster.ac?.[0] ??
+            10;
         }
       });
     }

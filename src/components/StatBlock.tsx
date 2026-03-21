@@ -11,63 +11,29 @@ import {
 } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
+import { MonsterSchema } from "../utils/schema";
 import "./StatBlock.css";
 
-function formatAC(acData: any): string {
-  if (!acData) return "";
-  if (Array.isArray(acData)) {
-    return acData
-      .map((item: any) => {
-        if (typeof item === "number") return item.toString();
-        if (typeof item === "object") {
-          let text = `${item.ac}`;
-          if (item.from) {
-            text += ` (${item.from
-              .map((f: string) =>
-                parseText(f)
-                  .map((node) =>
-                    typeof node === "string"
-                      ? node
-                      : (node as any).props?.children || "",
-                  )
-                  .join(""),
-              )
-              .join(", ")})`;
-          }
-          if (item.condition) {
-            text += ` ${parseText(item.condition)
-              .map((node) =>
-                typeof node === "string"
-                  ? node
-                  : (node as any).props?.children || "",
-              )
-              .join("")}`;
-          }
-          return text;
-        }
-        return "";
-      })
-      .join(", ");
-  }
-  return String(acData);
+function formatAC(acData: any): React.ReactNode {
+  if (!acData || !Array.isArray(acData)) return "";
+  return acData.map((item: any, index: number) => (
+    <span key={index}>
+      {item.value}
+      {item.details && <span> {parseText(item.details)}</span>}
+      {index < acData.length - 1 ? ", " : ""}
+    </span>
+  ));
 }
 
-function formatSpeed(speedData: any): string {
-  if (!speedData) return "0 ft.";
-  const speeds: string[] = [];
-  if (speedData.walk) speeds.push(`${speedData.walk} ft.`);
-  for (const [key, val] of Object.entries(speedData)) {
-    if (key === "walk" || key === "canHover") continue;
-    if (typeof val === "number") {
-      speeds.push(`${key} ${val} ft.`);
-    } else if (typeof val === "object" && val !== null) {
-      const v = val as any;
-      let text = `${key} ${v.number} ft.`;
-      if (v.condition) text += ` ${v.condition}`;
-      speeds.push(text);
-    }
-  }
-  return speeds.join(", ");
+function formatSpeed(speedData: any): React.ReactNode {
+  if (!speedData || !Array.isArray(speedData)) return "0 ft.";
+  return speedData.map((item: any, index: number) => (
+    <span key={index}>
+      {item.type} {item.value} ft.
+      {item.condition && <span> {parseText(item.condition)}</span>}
+      {index < speedData.length - 1 ? ", " : ""}
+    </span>
+  ));
 }
 
 function renderProperty(
@@ -102,7 +68,12 @@ function StatBlock() {
         if (items.length > 0) {
           const m = items[0].metadata[`${ID}/monster`];
           if (m) {
-            setMonster(m);
+            try {
+              setMonster(MonsterSchema.parse(m));
+            } catch (e) {
+              console.error("Zod parsing failed:", e);
+              setMonster(m);
+            }
           }
         }
       };
@@ -125,7 +96,12 @@ function StatBlock() {
       if (items.length > 0) {
         const m = items[0].metadata[`${ID}/monster`];
         if (m) {
-          setMonster(m);
+          try {
+            setMonster(MonsterSchema.parse(m));
+          } catch (e) {
+            console.error("Zod parsing failed:", e);
+            setMonster(m);
+          }
         } else {
           setMonster(null);
         }
@@ -262,12 +238,10 @@ function StatBlock() {
             <>
               <div className="subtitle">
                 {formatSize(monster.size || ["M"])}{" "}
-                {typeof monster.type === "string"
-                  ? monster.type
-                  : monster.type?.type +
-                    (monster.type?.tags
-                      ? ` (${monster.type.tags.join(", ")})`
-                      : "")}
+                {monster.type?.type || monster.type}
+                {monster.type?.tags?.length > 0
+                  ? ` (${monster.type.tags.join(", ")})`
+                  : ""}
                 {monster.alignment
                   ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
                   : ""}
@@ -383,9 +357,7 @@ function StatBlock() {
                 "CR",
                 monster.cr ? (
                   <>
-                    {typeof monster.cr === "string"
-                      ? monster.cr
-                      : monster.cr.cr}
+                    {monster.cr}
                     {` (PB +${getProficiencyBonus(monster.cr)})`}
                   </>
                 ) : null,
