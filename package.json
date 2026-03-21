@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check": "biome check --write src/",
+    "check": "biome check --write src/ test/",
     "check-ci": "biome ci src/",
     "preview": "vite preview",
     "build": "tsc -b && vite build",

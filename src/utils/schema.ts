@@ -79,12 +79,26 @@ export const TypeSchema = z.preprocess(
       if (typeof val.type === "object" && val.type.choose) {
         resolvedType = val.type.choose.join(" or ");
       }
-      return { type: resolvedType, tags: val.tags || [] };
+      const tags = (val.tags || []).map((t: any) =>
+        typeof t === "string" ? t : t.tag,
+      );
+      return { type: resolvedType, tags };
     }
     return { type: "", tags: [] };
   },
   z.object({ type: z.string(), tags: z.array(z.string()) }),
 );
+
+export const AlignmentSchema = z.preprocess((val: any) => {
+  if (!val || !Array.isArray(val)) return [];
+  return val.flatMap((item) => {
+    if (typeof item === "string") return item;
+    if (typeof item === "object" && item !== null && item.alignment) {
+      return item.alignment;
+    }
+    return [];
+  });
+}, z.array(z.string()));
 
 // Helper to normalize arrays of strings that might contain complex objects with notes
 const normalizeResistances = z.preprocess((val: any) => {
@@ -119,7 +133,7 @@ export const MonsterSchema = z.object({
   cr: CRSchema,
   type: TypeSchema,
   size: z.array(z.string()),
-  alignment: z.array(z.string()),
+  alignment: AlignmentSchema,
   hp: z.object({
     average: z.number(),
     formula: z.string(),

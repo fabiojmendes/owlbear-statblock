@@ -61,9 +61,9 @@ describe("Bestiary JSON Integration Test", () => {
         `Failed to validate ${errors.length} out of ${rawMonsters.length} monsters.`,
       );
       console.error(
-        errors
-          .slice(0, 5)
-          .map((e) => `Name: ${e.name}, Error: ${e.error.message || e.error}`),
+        errors.map(
+          (e) => `Name: ${e.name}, Error: ${e.error.message || e.error}`,
+        ),
       );
     }
 
