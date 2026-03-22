@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check": "biome check --write src/",
+    "check": "biome check --write src/ test/",
     "check-ci": "biome ci src/",
     "preview": "vite preview",
     "build": "tsc -b && vite build",
     "predeploy": "npm run build",
-    "deploy": "wrangler versions upload --preview-alias $(git branch --show-current)"
+    "deploy": "wrangler versions upload --preview-alias $(git branch --show-current)",
+    "test": "vitest run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -21,7 +22,8 @@
     "dice-typescript": "^1.6.1",
     "idb": "^8.0.3",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.7",
@@ -29,8 +31,10 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.0",
+    "@vitest/coverage-v8": "^4.1.0",
     "typescript": "~5.9.3",
     "vite": "^8.0.0",
+    "vitest": "^4.1.0",
     "wrangler": "^4.75.0"
   }
 }

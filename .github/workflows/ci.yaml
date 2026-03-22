@@ -34,6 +34,10 @@ jobs:
         # gives you clearer, isolated error messages if there's a TypeScript violation.
         run: npx tsc --noEmit
 
+      - name: Test Project
+        # Verifies that all tests passes
+        run: npm run test
+
       - name: Build Project
         # Verifies that Vite can successfully bundle the application
         run: npm run build

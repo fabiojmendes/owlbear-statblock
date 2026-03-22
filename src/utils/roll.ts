@@ -1,10 +1,11 @@
 import OBR from "@owlbear-rodeo/sdk";
 import type React from "react";
 import { DICE_PLUS_ID, ID } from "../constants.ts";
+import { formatBonus } from "./helpers.ts";
 
 export async function handleD20RollClick(
   e: React.MouseEvent,
-  bonus: number | string,
+  bonus: number,
   rollType: string = "roll",
 ) {
   let baseDice = "1d20";
@@ -14,18 +15,7 @@ export async function handleD20RollClick(
     baseDice = "2d20kl1";
   }
 
-  let formattedBonus = String(bonus);
-  if (
-    !formattedBonus.startsWith("+") &&
-    !formattedBonus.startsWith("-") &&
-    Number(formattedBonus) >= 0
-  ) {
-    formattedBonus = `+${formattedBonus}`;
-  } else if (Number(formattedBonus) < 0 && !formattedBonus.startsWith("-")) {
-    formattedBonus = `-${Math.abs(Number(formattedBonus))}`;
-  }
-
-  const notation = `${baseDice}${formattedBonus}`;
+  const notation = `${baseDice}${formatBonus(bonus)}`;
   return handleRollClick(notation, rollType);
 }
 

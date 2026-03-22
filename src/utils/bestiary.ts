@@ -1,6 +1,6 @@
 const DATA_DIR = "/data";
 
-export async function fetchBestiary(): Promise<Map<string, object>> {
+export async function fetchBestiary(): Promise<Map<string, any>> {
   try {
     const response = await fetch(`${DATA_DIR}/bestiary.json`);
     if (!response.ok) {
@@ -8,12 +8,8 @@ export async function fetchBestiary(): Promise<Map<string, object>> {
       return new Map();
     }
     const results = await response.json();
-    const monsterData = results?.monster?.reduce(
-      (accumulator: any, value: any) => {
-        accumulator.set(value.name.toLowerCase(), value);
-        return accumulator;
-      },
-      new Map(),
+    const monsterData = new Map<string, any>(
+      results.monster.map((m: any) => [m.name.toLowerCase(), m]),
     );
 
     console.log(

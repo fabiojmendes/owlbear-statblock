@@ -5,7 +5,9 @@ import App from "./App.tsx";
 import { ID } from "./constants.ts";
 import "./index.css";
 import { fetchBestiary } from "./utils/bestiary.ts";
+import { resolveMonster } from "./utils/copy.ts";
 import { getCustomMonster } from "./utils/idb.ts";
+import { MonsterSchema } from "./utils/schema.ts";
 
 OBR.onReady(async () => {
   const isGM = (await OBR.player.getRole()) === "GM";
@@ -26,11 +28,24 @@ OBR.onReady(async () => {
       const updates = new Map<string, any>();
       for (const item of characters) {
         let monster = await getCustomMonster(item.name.toLowerCase());
-        if (!monster) {
+        if (monster) {
+          monster = await resolveMonster(monster, async (n: string) => {
+            let m = await getCustomMonster(n.toLowerCase());
+            if (!m) {
+              m = monsterData.get(n.toLowerCase());
+            }
+            return m;
+          });
+        } else {
           monster = monsterData.get(item.name.toLowerCase());
         }
+
         if (monster) {
-          updates.set(item.id, monster);
+          try {
+            updates.set(item.id, MonsterSchema.parse(monster));
+          } catch (e) {
+            console.error(`Failed to parse monster for ${item.name}:`, e);
+          }
         }
       }
 

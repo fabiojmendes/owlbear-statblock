@@ -14,12 +14,12 @@ import OBR from "@owlbear-rodeo/sdk";
 import { Dice } from "dice-typescript";
 import { BATTLE_BOARD_ID, ID } from "../constants.ts";
 import { useRollVisibility } from "../hooks/useRollVisibility.ts";
-import { getInitiativeBonus } from "../utils/helpers.ts";
+import { formatBonus } from "../utils/helpers.ts";
+import type { Monster } from "../utils/schema";
 
 const dice = new Dice();
 
-function rollInitiative(monster: any) {
-  const initBonus = getInitiativeBonus(monster);
+function rollInitiative(monster: Monster) {
   let baseDice: string;
   switch (monster.initiative?.advantageMode) {
     case "adv":
@@ -31,7 +31,7 @@ function rollInitiative(monster: any) {
     default:
       baseDice = "1d20";
   }
-  const formula = `${baseDice}${initBonus >= 0 ? `+${initBonus}` : `${initBonus}`}`;
+  const formula = `${baseDice}${formatBonus(monster.initBonus)}`;
   return dice.roll(formula).total;
 }
 
@@ -55,25 +55,28 @@ function Actions() {
     if (typeof event.data === "string") {
       OBR.scene.items.updateItems([event.data], (items) => {
         for (const item of items) {
-          const monster: any = item.metadata[`${ID}/monster`];
+          const rawMonster = item.metadata[`${ID}/monster`];
           const battleBoard: any = item.metadata[`${BATTLE_BOARD_ID}/metadata`];
 
           if (
             item.layer !== "CHARACTER" ||
-            !monster ||
+            !rawMonster ||
             !battleBoard?.inInitiative
           ) {
             continue;
           }
 
+          const monster = rawMonster as Monster;
+
           battleBoard.initiative = rollInitiative(monster);
 
-          if (monster?.hp?.formula) {
-            const hp = dice.roll(monster.hp.formula).total;
-            battleBoard.maxHP = hp;
-            battleBoard.currentHP = hp;
+          const hp = dice.roll(monster.hp.formula).total;
+          battleBoard.maxHP = hp;
+          battleBoard.currentHP = hp;
+
+          if (monster.ac[0]?.value) {
+            battleBoard.ac = monster.ac[0].value;
           }
-          battleBoard.ac = monster.ac[0].ac || monster.ac[0];
         }
       });
     }

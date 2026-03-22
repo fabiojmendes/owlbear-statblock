@@ -1,73 +1,30 @@
 import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
 import { ID } from "../constants.ts";
-import {
-  formatAlignment,
-  formatSize,
-  getInitiativeBonus,
-  getModifier,
-  getPassiveInitiative,
-  getProficiencyBonus,
-} from "../utils/helpers";
+import { formatBonus, getModifier } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
+import type { AC, Monster, Speed } from "../utils/schema";
 import "./StatBlock.css";
 
-function formatAC(acData: any): string {
-  if (!acData) return "";
-  if (Array.isArray(acData)) {
-    return acData
-      .map((item: any) => {
-        if (typeof item === "number") return item.toString();
-        if (typeof item === "object") {
-          let text = `${item.ac}`;
-          if (item.from) {
-            text += ` (${item.from
-              .map((f: string) =>
-                parseText(f)
-                  .map((node) =>
-                    typeof node === "string"
-                      ? node
-                      : (node as any).props?.children || "",
-                  )
-                  .join(""),
-              )
-              .join(", ")})`;
-          }
-          if (item.condition) {
-            text += ` ${parseText(item.condition)
-              .map((node) =>
-                typeof node === "string"
-                  ? node
-                  : (node as any).props?.children || "",
-              )
-              .join("")}`;
-          }
-          return text;
-        }
-        return "";
-      })
-      .join(", ");
-  }
-  return String(acData);
+function formatAC(acData: AC): React.ReactNode {
+  return acData.map((item: any, index: number) => (
+    <span key={index}>
+      {item.value}
+      {item.details && <span> {parseText(item.details)}</span>}
+      {index < acData.length - 1 ? ", " : ""}
+    </span>
+  ));
 }
 
-function formatSpeed(speedData: any): string {
-  if (!speedData) return "0 ft.";
-  const speeds: string[] = [];
-  if (speedData.walk) speeds.push(`${speedData.walk} ft.`);
-  for (const [key, val] of Object.entries(speedData)) {
-    if (key === "walk" || key === "canHover") continue;
-    if (typeof val === "number") {
-      speeds.push(`${key} ${val} ft.`);
-    } else if (typeof val === "object" && val !== null) {
-      const v = val as any;
-      let text = `${key} ${v.number} ft.`;
-      if (v.condition) text += ` ${v.condition}`;
-      speeds.push(text);
-    }
-  }
-  return speeds.join(", ");
+function formatSpeed(speedData: Speed): React.ReactNode {
+  return speedData.map((item: any, index: number) => (
+    <span key={index}>
+      {item.type} {item.value} ft.
+      {item.condition && <span> {parseText(item.condition)}</span>}
+      {index < speedData.length - 1 ? ", " : ""}
+    </span>
+  ));
 }
 
 function renderProperty(
@@ -90,7 +47,7 @@ function renderProperty(
 }
 
 function StatBlock() {
-  const [monster, setMonster] = useState<any>(null);
+  const [monster, setMonster] = useState<Monster | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
@@ -102,7 +59,7 @@ function StatBlock() {
         if (items.length > 0) {
           const m = items[0].metadata[`${ID}/monster`];
           if (m) {
-            setMonster(m);
+            setMonster(m as Monster);
           }
         }
       };
@@ -125,7 +82,7 @@ function StatBlock() {
       if (items.length > 0) {
         const m = items[0].metadata[`${ID}/monster`];
         if (m) {
-          setMonster(m);
+          setMonster(m as Monster);
         } else {
           setMonster(null);
         }
@@ -261,15 +218,12 @@ function StatBlock() {
           ) : (
             <>
               <div className="subtitle">
-                {formatSize(monster.size || ["M"])}{" "}
-                {typeof monster.type === "string"
-                  ? monster.type
-                  : monster.type?.type +
-                    (monster.type?.tags
-                      ? ` (${monster.type.tags.join(", ")})`
-                      : "")}
-                {monster.alignment
-                  ? `, ${monster.alignmentPrefix || ""}${formatAlignment(monster.alignment)}`
+                {monster.formattedSize} {monster.type?.type}
+                {monster.type?.tags && monster.type.tags.length > 0
+                  ? ` (${monster.type.tags.join(", ")})`
+                  : ""}
+                {monster.formattedAlignment
+                  ? `, ${monster.alignmentPrefix || ""}${monster.formattedAlignment}`
                   : ""}
               </div>
               <hr className="rule" />
@@ -281,16 +235,12 @@ function StatBlock() {
                   <button
                     type="button"
                     className="rollable"
-                    onClick={(e) =>
-                      handleD20RollClick(e, getInitiativeBonus(monster))
-                    }
+                    onClick={(e) => handleD20RollClick(e, monster.initBonus)}
                   >
                     {" "}
-                    {getInitiativeBonus(monster) >= 0
-                      ? `+${getInitiativeBonus(monster)}`
-                      : getInitiativeBonus(monster)}
+                    {formatBonus(monster.initBonus)}
                   </button>
-                  {` (${getPassiveInitiative(monster, getInitiativeBonus(monster))})`}
+                  {` (${monster.passiveInit})`}
                 </div>
               </div>
               {renderProperty(
@@ -304,15 +254,14 @@ function StatBlock() {
               <hr className="rule" />
               <div className="statblock-grid">
                 {[
-                  { name: "str", label: "STR" },
-                  { name: "dex", label: "DEX" },
-                  { name: "con", label: "CON" },
-                  { name: "int", label: "INT" },
-                  { name: "wis", label: "WIS" },
-                  { name: "cha", label: "CHA" },
+                  { name: "str", label: "STR", value: monster.str },
+                  { name: "dex", label: "DEX", value: monster.dex },
+                  { name: "con", label: "CON", value: monster.con },
+                  { name: "int", label: "INT", value: monster.int },
+                  { name: "wis", label: "WIS", value: monster.wis },
+                  { name: "cha", label: "CHA", value: monster.cha },
                 ].map((stat) => {
-                  const score = monster[stat.name] || 10;
-                  const mod = getModifier(score);
+                  const mod = getModifier(stat.value);
                   const save = monster.save?.[stat.name] || mod;
                   return (
                     <div key={stat.name} className="ability-block">
@@ -323,13 +272,13 @@ function StatBlock() {
                         <div className="ability-save-label">SAVE</div>
                       </div>
                       <div className="ability-name">{stat.label}</div>
-                      <div className="ability-score">{score}</div>
+                      <div className="ability-score">{stat.value}</div>
                       <button
                         type="button"
                         className="rollable ability-value"
                         onClick={(e) => handleD20RollClick(e, mod)}
                       >
-                        {mod}
+                        {formatBonus(mod)}
                       </button>
                       <button
                         type="button"
@@ -337,7 +286,7 @@ function StatBlock() {
                         onClick={(e) => handleD20RollClick(e, save)}
                       >
                         {" "}
-                        {save}
+                        {formatBonus(save)}
                       </button>
                     </div>
                   );
@@ -383,10 +332,8 @@ function StatBlock() {
                 "CR",
                 monster.cr ? (
                   <>
-                    {typeof monster.cr === "string"
-                      ? monster.cr
-                      : monster.cr.cr}
-                    {` (PB +${getProficiencyBonus(monster.cr)})`}
+                    {monster.cr}
+                    {` (PB +${monster.pb})`}
                   </>
                 ) : null,
               )}

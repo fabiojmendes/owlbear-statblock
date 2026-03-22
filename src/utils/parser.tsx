@@ -56,7 +56,7 @@ export function parseText(text: string): React.ReactNode[] {
             type="button"
             key={match.index}
             className="rollable"
-            onClick={(e) => handleD20RollClick(e, mainValue)}
+            onClick={(e) => handleD20RollClick(e, Number(mainValue))}
           >
             {mainValue.startsWith("+") || mainValue.startsWith("-")
               ? mainValue
