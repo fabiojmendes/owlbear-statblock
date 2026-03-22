@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ACSchema = z.preprocess(
+const ACSchema = z.preprocess(
   (val: any) => {
     if (!val) return [];
     if (Array.isArray(val)) {
@@ -28,7 +28,7 @@ export const ACSchema = z.preprocess(
   z.array(z.object({ value: z.number(), details: z.string() })),
 );
 
-export const SpeedSchema = z.preprocess(
+const SpeedSchema = z.preprocess(
   (val: any) => {
     if (!val) return [];
     if (Array.isArray(val)) return val; // If already normalized
@@ -64,13 +64,13 @@ export const SpeedSchema = z.preprocess(
   ),
 );
 
-export const CRSchema = z.preprocess((val: any) => {
+const CRSchema = z.preprocess((val: any) => {
   if (typeof val === "string") return val; // If already normalized
   if (typeof val === "object" && val !== null) return val.cr || "0";
   return String(val || "0");
 }, z.string());
 
-export const TypeSchema = z.preprocess(
+const TypeSchema = z.preprocess(
   (val: any) => {
     if (typeof val === "string") return { type: val, tags: [] };
     if (typeof val === "object" && val !== null) {
@@ -89,7 +89,7 @@ export const TypeSchema = z.preprocess(
   z.object({ type: z.string(), tags: z.array(z.string()) }),
 );
 
-export const AlignmentSchema = z.preprocess((val: any) => {
+const AlignmentSchema = z.preprocess((val: any) => {
   if (!val || !Array.isArray(val)) return [];
   return val.flatMap((item) => {
     if (typeof item === "string") return item;
@@ -126,6 +126,11 @@ const normalizeResistances = z.preprocess((val: any) => {
   return result.length > 0 ? result : undefined;
 }, z.array(z.string()).optional());
 
+const normalizeSaves = z.preprocess(
+  (val: number | string) => Number(val),
+  z.number(),
+);
+
 export const MonsterSchema = z
   .object({
     name: z.string(),
@@ -148,7 +153,7 @@ export const MonsterSchema = z
     passive: z.number(),
     externalLink: z.string().optional(),
     alignmentPrefix: z.string().optional(),
-    save: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+    save: z.record(z.string(), normalizeSaves).optional(),
     skill: z.record(z.string(), z.string()).optional(),
     vulnerable: normalizeResistances,
     resist: normalizeResistances,

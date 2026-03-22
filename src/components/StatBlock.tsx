@@ -1,14 +1,13 @@
 import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
 import { ID } from "../constants.ts";
-import { getModifier } from "../utils/helpers";
+import { formatBonus, getModifier } from "../utils/helpers";
 import { parseText } from "../utils/parser";
 import { handleD20RollClick } from "../utils/roll";
 import type { AC, Monster, Speed } from "../utils/schema";
 import "./StatBlock.css";
 
-function formatAC(acData: AC | undefined): React.ReactNode {
-  if (!acData || !Array.isArray(acData)) return "";
+function formatAC(acData: AC): React.ReactNode {
   return acData.map((item: any, index: number) => (
     <span key={index}>
       {item.value}
@@ -18,8 +17,7 @@ function formatAC(acData: AC | undefined): React.ReactNode {
   ));
 }
 
-function formatSpeed(speedData: Speed | undefined): React.ReactNode {
-  if (!speedData || !Array.isArray(speedData)) return "0 ft.";
+function formatSpeed(speedData: Speed): React.ReactNode {
   return speedData.map((item: any, index: number) => (
     <span key={index}>
       {item.type} {item.value} ft.
@@ -240,9 +238,7 @@ function StatBlock() {
                     onClick={(e) => handleD20RollClick(e, monster.initBonus)}
                   >
                     {" "}
-                    {monster.initBonus >= 0
-                      ? `+${monster.initBonus}`
-                      : monster.initBonus}
+                    {formatBonus(monster.initBonus)}
                   </button>
                   {` (${monster.passiveInit})`}
                 </div>
@@ -283,7 +279,7 @@ function StatBlock() {
                         className="rollable ability-value"
                         onClick={(e) => handleD20RollClick(e, mod)}
                       >
-                        {mod}
+                        {formatBonus(mod)}
                       </button>
                       <button
                         type="button"
@@ -291,7 +287,7 @@ function StatBlock() {
                         onClick={(e) => handleD20RollClick(e, save)}
                       >
                         {" "}
-                        {save}
+                        {formatBonus(save)}
                       </button>
                     </div>
                   );
