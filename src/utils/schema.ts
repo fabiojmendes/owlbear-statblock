@@ -131,6 +131,15 @@ const normalizeSaves = z.preprocess(
   z.number(),
 );
 
+export const CopyMonsterSchema = z.object({
+  name: z.string().optional(),
+  _copy: z.object({
+    name: z.string(),
+    source: z.string().optional(),
+    _mod: z.any().optional(),
+  }),
+});
+
 export const MonsterSchema = z
   .object({
     name: z.string(),

@@ -21,6 +21,24 @@ export function parseText(text: string): React.ReactNode[] {
     const parts = content.split("|");
     const mainValue = parts[0];
 
+    // For pipe delimited values (e.g. {@skill Perception}, {@chance 40|40 percent|40% summoning chance})
+    // Some use parts[2] (third item) as the display text, others use parts[0].
+    // If parts[2] exists and isn't purely an integer reference like in `{@quickref difficult terrain||3}`,
+    // we should use it. Alternatively, just using parts[0] as a fallback.
+    let displayValue = mainValue;
+    if (tag === "chance") {
+      displayValue = parts[2] || parts[1] || parts[0];
+    } else if (tag === "quickref" || tag === "variantrule") {
+      // e.g. {@quickref difficult terrain||3} -> difficult terrain
+      // e.g. {@variantrule Emanation [Area of Effect]|XPHB|Emanation} -> Emanation
+      displayValue = parts[2] || parts[0];
+      if (/^\d+$/.test(displayValue)) {
+        displayValue = parts[0];
+      }
+    } else {
+      displayValue = parts[2] || parts[0];
+    }
+
     switch (tag) {
       case "atk":
         if (mainValue === "mw")
@@ -91,6 +109,9 @@ export function parseText(text: string): React.ReactNode[] {
       case "h":
         elements.push(<em key={match.index}>Hit:</em>);
         break;
+      case "hom":
+        elements.push(<em key={match.index}>Hit or Miss:</em>);
+        break;
       case "dc":
         elements.push(`DC ${mainValue}`);
         break;
@@ -129,14 +150,40 @@ export function parseText(text: string): React.ReactNode[] {
       case "actSaveFail":
         elements.push(<em key={match.index}>Failure:</em>);
         break;
+      case "actSaveFailBy":
+        elements.push(
+          <em key={match.index}>Failure by {mainValue} or more:</em>,
+        );
+        break;
       case "actSaveSuccess":
         elements.push(<em key={match.index}>Success:</em>);
+        break;
+      case "actSaveSuccessOrFail":
+        elements.push(<em key={match.index}>Success or Failure:</em>);
+        break;
+      case "actTrigger":
+        elements.push(<em key={match.index}>Trigger:</em>);
+        break;
+      case "actResponse":
+        elements.push(<em key={match.index}>Response:</em>);
+        break;
+      case "note":
+        elements.push(<em key={match.index}>{mainValue}</em>);
         break;
       case "spell":
       case "item":
       case "condition":
       case "creature":
-        elements.push(<strong key={match.index}>{mainValue}</strong>);
+      case "skill":
+      case "action":
+      case "status":
+      case "sense":
+      case "hazard":
+      case "book":
+      case "variantrule":
+      case "quickref":
+      case "chance":
+        elements.push(<strong key={match.index}>{displayValue}</strong>);
         break;
       default:
         elements.push(mainValue);

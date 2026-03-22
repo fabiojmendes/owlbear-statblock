@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Box,
   Button,
   Chip,
@@ -33,6 +34,7 @@ export default function CustomPacksModal() {
   const [packMonsters, setPackMonsters] = useState<Record<string, string[]>>(
     {},
   );
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDone = () => {
@@ -57,13 +59,22 @@ export default function CustomPacksModal() {
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    if (event.target.files && event.target.files.length > 1) {
+      setError("Please select only one file at a time.");
+      return;
+    }
+    setError(null);
+
     const file = event.target.files?.[0];
     if (file) {
       try {
         await addPack(file);
         await loadPacks();
-      } catch (error) {
-        console.error("Failed to upload pack:", error);
+      } catch (err) {
+        console.error("Failed to upload pack:", err);
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
       }
     }
     if (fileInputRef.current) {
@@ -115,6 +126,11 @@ export default function CustomPacksModal() {
           style={{ display: "none" }}
         />
       </Box>
+      {error && (
+        <Alert severity="error" onClose={() => setError(null)} sx={{ m: 1 }}>
+          {error}
+        </Alert>
+      )}
       <Divider />
       <Box sx={{ flexGrow: 1, overflowY: "auto", p: 1 }}>
         {packs.length === 0 ? (
@@ -135,6 +151,7 @@ export default function CustomPacksModal() {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={`pack-${pack.id}-content`}
                 id={`pack-${pack.id}-header`}
+                component="div"
               >
                 <Box
                   sx={{

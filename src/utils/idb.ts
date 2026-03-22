@@ -1,4 +1,5 @@
 import { type DBSchema, openDB } from "idb";
+import { CopyMonsterSchema, MonsterSchema } from "./schema.ts";
 
 export interface Pack {
   id: string;
@@ -47,7 +48,12 @@ export async function initDB() {
 
 export async function addPack(file: File): Promise<void> {
   const text = await file.text();
-  const data = JSON.parse(text);
+  let data: any;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error("Invalid JSON format. Please upload a valid JSON file.");
+  }
 
   let monstersArray = [];
   if (Array.isArray(data)) {
@@ -55,7 +61,25 @@ export async function addPack(file: File): Promise<void> {
   } else if (data.monster && Array.isArray(data.monster)) {
     monstersArray = data.monster;
   } else {
-    throw new Error("Invalid monster file format");
+    throw new Error(
+      "Invalid monster file format. Expected an array of monsters or an object with a 'monster' array.",
+    );
+  }
+
+  for (let i = 0; i < monstersArray.length; i++) {
+    const monster = monstersArray[i];
+    const schemaToUse = monster._copy ? CopyMonsterSchema : MonsterSchema;
+    const result = schemaToUse.safeParse(monster);
+
+    if (!result.success) {
+      const firstError = result.error.issues[0];
+      const path = firstError.path.join(".");
+      const monsterLabel =
+        monster.name || monster._copy?.name || `at index ${i}`;
+      throw new Error(
+        `Validation failed for monster '${monsterLabel}' at '${path}': ${firstError.message}`,
+      );
+    }
   }
 
   const db = await initDB();
@@ -73,10 +97,11 @@ export async function addPack(file: File): Promise<void> {
 
   const monsterStore = tx.objectStore("monsters");
   for (const monster of monstersArray) {
-    if (monster.name) {
+    const name = monster.name || monster._copy?.name;
+    if (name) {
       await monsterStore.put({
         ...monster,
-        id: monster.name.toLowerCase(),
+        id: name.toLowerCase(),
         packId,
       });
     }
