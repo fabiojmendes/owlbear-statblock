@@ -11,8 +11,9 @@ export async function resolveMonster(
   const baseMonster = await getMonsterByName(baseName);
 
   if (!baseMonster) {
-    console.warn(`Base monster '${baseName}' not found for copy resolution.`);
-    return monster;
+    throw new Error(
+      `Base monster '${baseName}' not found for copy resolution.`,
+    );
   }
 
   // Handle source matching (e.g. MM falls back to XMM)

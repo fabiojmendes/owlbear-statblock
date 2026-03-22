@@ -10,6 +10,7 @@ import { getCustomMonster } from "./utils/idb.ts";
 import { MonsterSchema } from "./utils/schema.ts";
 
 OBR.onReady(async () => {
+  console.log("On Ready trigger");
   const isGM = (await OBR.player.getRole()) === "GM";
 
   if (isGM) {
@@ -17,6 +18,7 @@ OBR.onReady(async () => {
     const monsterData = await fetchBestiary();
 
     OBR.scene.items.onChange(async (items) => {
+      console.log("Update trigger", items);
       const characters = items.filter(
         (item) =>
           item.layer === "CHARACTER" &&
@@ -29,13 +31,18 @@ OBR.onReady(async () => {
       for (const item of characters) {
         let monster = await getCustomMonster(item.name.toLowerCase());
         if (monster) {
-          monster = await resolveMonster(monster, async (n: string) => {
-            let m = await getCustomMonster(n.toLowerCase());
-            if (!m) {
-              m = monsterData.get(n.toLowerCase());
-            }
-            return m;
-          });
+          try {
+            monster = await resolveMonster(monster, async (n: string) => {
+              let m = await getCustomMonster(n.toLowerCase());
+              if (!m) {
+                m = monsterData.get(n.toLowerCase());
+              }
+              return m;
+            });
+          } catch (error) {
+            console.error(error);
+            continue;
+          }
         } else {
           monster = monsterData.get(item.name.toLowerCase());
         }
