@@ -4,13 +4,14 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { ID } from "./constants.ts";
 import "./index.css";
+import { PluginGate } from "./components/PluginGate.tsx";
+import { OBRThemeProvider } from "./theme/OBRThemeProvider.tsx";
 import { fetchBestiary } from "./utils/bestiary.ts";
 import { resolveMonster } from "./utils/copy.ts";
 import { getCustomMonster } from "./utils/idb.ts";
 import { MonsterSchema } from "./utils/schema.ts";
 
 OBR.onReady(async () => {
-  console.log("On Ready trigger");
   const isGM = (await OBR.player.getRole()) === "GM";
 
   if (isGM) {
@@ -18,7 +19,6 @@ OBR.onReady(async () => {
     const monsterData = await fetchBestiary();
 
     OBR.scene.items.onChange(async (items) => {
-      console.log("Update trigger", items);
       const characters = items.filter(
         (item) =>
           item.layer === "CHARACTER" &&
@@ -68,13 +68,17 @@ OBR.onReady(async () => {
       }
     });
   }
-
-  const rootElement = document.getElementById("root");
-  if (rootElement) {
-    createRoot(rootElement).render(
-      <StrictMode>
-        <App isGM={isGM} />
-      </StrictMode>,
-    );
-  }
 });
+
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <PluginGate>
+        <OBRThemeProvider>
+          <App />
+        </OBRThemeProvider>
+      </PluginGate>
+    </StrictMode>,
+  );
+}
