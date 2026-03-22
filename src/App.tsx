@@ -10,9 +10,12 @@ import OBR from "@owlbear-rodeo/sdk";
 import { useEffect, useState } from "react";
 import Actions from "./components/Actions.tsx";
 import { ID } from "./constants.ts";
+import { useMonsterSync } from "./hooks/useMonsterSync.ts";
 
 function App() {
   const [isGM, setGM] = useState(false);
+  useMonsterSync();
+
   useEffect(() => {
     const getRole = async () => {
       setGM((await OBR.player.getRole()) === "GM");
