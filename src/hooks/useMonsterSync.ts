@@ -7,20 +7,14 @@ import { getCustomMonster } from "../utils/idb.ts";
 import { MonsterSchema } from "../utils/schema.ts";
 
 export function useMonsterSync() {
-  console.log("useMonsterSync: call");
   useEffect(() => {
-    console.log("useMonsterSync: useEffect");
     let unsubscribe: () => void;
 
     const init = async () => {
-      console.log("useMonsterSync: init");
       if (!OBR.isReady) return;
-      console.log("useMonsterSync: ready");
 
       const isGM = (await OBR.player.getRole()) === "GM";
       if (!isGM) return;
-
-      console.log("useMonsterSync: isGM:", isGM);
 
       const monsterData = await fetchBestiary();
 
@@ -79,7 +73,6 @@ export function useMonsterSync() {
 
     return () => {
       if (unsubscribe) {
-        console.log("useMonsterSync: unsubscribe");
         unsubscribe();
       }
     };
