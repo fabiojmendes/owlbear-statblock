@@ -126,11 +126,11 @@ export default function CustomPacksModal() {
           style={{ display: "none" }}
         />
       </Box>
-      {/* {error && ( */}
-      {/*   <Alert severity="error" onClose={() => setError(null)} sx={{ m: 1 }}> */}
-      {/*     {error} */}
-      {/*   </Alert> */}
-      {/* )} */}
+      {error && (
+        <Alert severity="error" onClose={() => setError(null)} sx={{ m: 1 }}>
+          {error}
+        </Alert>
+      )}
       <Divider />
       <Box sx={{ flexGrow: 1, overflowY: "auto", p: 1 }}>
         {packs.length === 0 ? (
@@ -151,6 +151,7 @@ export default function CustomPacksModal() {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={`pack-${pack.id}-content`}
                 id={`pack-${pack.id}-header`}
+                component="div"
               >
                 <Box
                   sx={{
