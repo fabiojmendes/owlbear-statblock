@@ -254,15 +254,14 @@ function StatBlock() {
               <hr className="rule" />
               <div className="statblock-grid">
                 {[
-                  { name: "str", label: "STR" },
-                  { name: "dex", label: "DEX" },
-                  { name: "con", label: "CON" },
-                  { name: "int", label: "INT" },
-                  { name: "wis", label: "WIS" },
-                  { name: "cha", label: "CHA" },
+                  { name: "str", label: "STR", value: monster.str },
+                  { name: "dex", label: "DEX", value: monster.dex },
+                  { name: "con", label: "CON", value: monster.con },
+                  { name: "int", label: "INT", value: monster.int },
+                  { name: "wis", label: "WIS", value: monster.wis },
+                  { name: "cha", label: "CHA", value: monster.cha },
                 ].map((stat) => {
-                  const score = Number((monster as any)[stat.name]) || 10;
-                  const mod = getModifier(score);
+                  const mod = getModifier(stat.value);
                   const save = monster.save?.[stat.name] || mod;
                   return (
                     <div key={stat.name} className="ability-block">
@@ -273,7 +272,7 @@ function StatBlock() {
                         <div className="ability-save-label">SAVE</div>
                       </div>
                       <div className="ability-name">{stat.label}</div>
-                      <div className="ability-score">{score}</div>
+                      <div className="ability-score">{stat.value}</div>
                       <button
                         type="button"
                         className="rollable ability-value"
