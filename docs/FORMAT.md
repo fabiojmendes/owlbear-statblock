@@ -114,32 +114,31 @@ If you are creating variations of existing monsters, you do not need to rewrite
 their entire stat block. You can use the `_copy` attribute to inherit all
 properties from another monster and apply specific modifications.
 
-For example, to create a "Goblin Captain" based on the standard Goblin but with
-an additional "Leadership" action:
+For example, to create a "Goblin Brawler" based on the standard Goblin but with
+an additional "Club" action:
 
 ```json
 [
   {
-    "name": "Goblin Captain",
+    "name": "Goblin Brawler",
     "_copy": {
       "name": "Goblin",
       "_mod": {
         "action": {
           "mode": "appendArr",
           "items": {
-            "name": "Leadership (Recharges after a Short or Long Rest)",
+            "name": "Club",
             "entries": [
-              "For 1 minute, the goblin can utter a special command or warning whenever a nonhostile creature that it can see within 30 feet of it makes an attack roll or a saving throw. The creature can add a d4 to its roll provided it can hear and understand the goblin. A creature can benefit from only one Leadership die at a time. This effect ends if the goblin is incapacitated."
+              "{@atk mw} {@hit 4} to hit. {@h} 4 ({@damage 1d4 + 2}) damage."
             ]
           }
         }
       }
     },
     "hp": {
-      "average": 21,
-      "formula": "6d6"
-    },
-    "cr": "1"
+      "average": 12,
+      "formula": "3d6 + 2"
+    }
   }
 ]
 ```
@@ -147,9 +146,9 @@ an additional "Leadership" action:
 In this example:
 
 1. **Copy** all base statistics from the "Goblin".
-2. **Override** the `hp` and `cr` directly by defining them at the top level.
-3. **Modify** the `action` array using `appendArr` to add a completely new
-   ability without removing the original "Scimitar" or "Shortbow" attacks.
+2. **Override** the `hp` directly by defining it at the top level.
+3. **Modify** the `action` array using `appendArr` to add a new "Club" attack
+   without removing the original "Scimitar" or "Shortbow" actions.
 
 _Note: The base monster referenced in `_copy.name` must exist either within the
 same JSON file, in previously uploaded custom packs, or in the core bestiary._
