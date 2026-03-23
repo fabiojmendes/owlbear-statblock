@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/fabiojmendes/owlbear-statblock/compare/v1.0.0...v1.0.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* prevent from showing statblocks for monsters data don't have one ([#13](https://github.com/fabiojmendes/owlbear-statblock/issues/13)) ([45925f0](https://github.com/fabiojmendes/owlbear-statblock/commit/45925f0a9a43703484c18fea67459ffe3918b3eb))
+
 ## 1.0.0 (2026-03-23)
 
 
