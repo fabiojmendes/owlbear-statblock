@@ -14,6 +14,9 @@ roll from during encounters.
 - **Automatic Detection**: When a GM adds a character token to the map, the
   extension checks its name against the bestiary. If a match is found, the stat
   block is securely attached to the token's metadata.
+- **Included Bestiary**: Built-in support for over 330 monsters from the
+  [SRD 5.2](https://www.dndbeyond.com/srd) (see the
+  [complete list](./docs/MONSTERS.md)).
 - **Interactive Rolls**: Click on ability checks, saving throws, attack bonuses,
   or damage dice within the stat block to roll them instantly.
 - **Roll Visibility**: Toggle between public and private rolls. Choosing "GM
@@ -35,14 +38,29 @@ roll from during encounters.
      automatically, speeding up the detection process.
 3. **Name the Token**: Give the token the name of a standard 5e monster (e.g.,
    `Goblin`, `Adult Red Dragon`, `Acolyte`). The extension ignores case.
-4. **Configure Roll Visibility**: In the main extension panel, use the **Roll
-   Visibility** drop-down to choose between "Everyone" and "GM Only".
-5. **Open the Stat Block Window**: Click the **Show** button in the extension's
+4. **Open the Stat Block Window**: Click the **Show** button in the extension's
    main panel to open the stat block viewer.
-6. **View the Stat Block**: Select a token. If a match was found, its
+5. **View the Stat Block**: Select a token. If a match was found, its
    interactive stat block will appear in the window.
-7. **Manage Custom Packs**: Click the Settings gear icon in the main extension
-   panel to upload your own `.json` files containing custom monsters.
+
+### Managing Custom Packs
+
+You can expand your bestiary beyond the built-in SRD by uploading your own
+monster packs.
+
+1. **Prepare your JSON**: Your custom monsters must follow a specific data
+   format. Refer to the [Custom Pack Formatting Guide](./docs/FORMAT.md) for
+   schema details and interactive tag support.
+2. **Access the Manager**: Click the **Settings (gear icon)** in the extension
+   panel to open the Custom Packs manager.
+3. **Upload and Validate**: Click **Upload** to select your `.json` file.
+   - The extension performs **automatic validation** during upload. If your file
+     contains errors (e.g. a missing Armor Class or malformed dice notation), a
+     descriptive error message will pinpoint exactly which monster and field
+     need fixing.
+4. **Browse and Delete**: Uploaded packs are stored locally in your browser. You
+   can expand a pack to see its monster list or click the **Delete (trash
+   icon)** to remove it.
 
 ## Integrations
 
@@ -59,6 +77,9 @@ dice roll.
 - **Advantage/Disadvantage**: Hold **Shift** while clicking a roll to roll with
   Advantage, or **Cmd/Ctrl** to roll with Disadvantage.
 
+- **Configure Roll Visibility**: In the main extension panel, use the **Roll
+  Visibility** drop-down to choose between "Everyone" and "GM Only".
+
 ![Screenshot of Statblock roll triggering a Dice+ roll](./docs/images/dice-plus.png)
 
 ### Battle-board
@@ -72,12 +93,6 @@ your encounters.
   will automatically open its stat block in this extension.
 
 ![Screenshot of Statblock open next to Battle-board during combat](./docs/images/battle-board.png)
-
-## Creating Custom Packs
-
-If you want to add your own monsters, check out the
-[Custom Pack Formatting Guide](./docs/FORMAT.md) to learn how to structure your
-JSON files.
 
 ## Contributing
 
