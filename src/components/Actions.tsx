@@ -82,9 +82,15 @@ function Actions() {
     }
   });
 
-  OBR.broadcast.onMessage(`${BATTLE_BOARD_ID}/selected`, (event) => {
+  OBR.broadcast.onMessage(`${BATTLE_BOARD_ID}/selected`, async (event) => {
     if (typeof event.data === "string") {
-      showStatblock(event.data);
+      const item = await OBR.scene.items.getItems([event.data]);
+      const monster = item[0]?.metadata[`${ID}/monster`];
+      if (monster) {
+        showStatblock(event.data);
+      } else {
+        OBR.popover.close(`${ID}/statblock`);
+      }
     }
   });
 
