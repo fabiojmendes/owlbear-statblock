@@ -45,7 +45,7 @@ function App() {
     >
       <CardHeader
         sx={{ p: 0 }}
-        title="StatBlock"
+        title="Statblock"
         slotProps={{
           title: {
             variant: "h6",
