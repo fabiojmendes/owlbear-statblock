@@ -9,7 +9,7 @@ export async function fetchBestiary(): Promise<Map<string, any>> {
     }
     const results = await response.json();
     const monsterData = new Map<string, any>(
-      results.monster.map((m: any) => [m.name.toLowerCase(), m]),
+      results.map((m: any) => [m.name.toLowerCase(), m]),
     );
 
     console.log(
