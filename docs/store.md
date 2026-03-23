@@ -10,6 +10,7 @@ tags:
 manifest: https://statblock.juzam.pro/manifest.json
 learn-more: https://github.com/fabiojmendes/owlbear-statblock
 ---
+
 # Owlbear Statblock
 
 Owlbear Statblock is an extension for [Owlbear Rodeo](https://www.owlbear.rodeo)
@@ -18,8 +19,6 @@ tabletop. It comes pre-loaded with the full bestiary from the **System Reference
 Document 5.2 (SRD 5.2)** and automatically detects monsters by the name on their
 token, attaching an interactive stat block that the Game Master can view and
 roll from during encounters.
-
-![Interactive 5e Stat Block](https://raw.githubusercontent.com/fabiojmendes/owlbear-statblock/master/docs/images/statblock.png)
 
 ## Features
 
@@ -84,10 +83,10 @@ to enhance your VTT experience.
 
 ### Dice+
 
-If you have the **Dice+** extension installed, any rolls you click in a stat
-block (such as an attack roll of `+5` or damage of `1d6 + 2`) will be sent
-directly to the 3D dice tray, allowing everyone at the table to see the physical
-dice roll.
+If you have the [**Dice+**](https://extensions.owlbear.rodeo/dice-plus)
+extension installed, any rolls you click in a stat block (such as an attack roll
+of `+5` or damage of `1d6 + 2`) will be sent directly to the 3D dice tray,
+allowing everyone at the table to see the physical dice roll.
 
 - **Advantage/Disadvantage**: Hold **Shift** while clicking a roll to roll with
   Advantage, or **Cmd/Ctrl** to roll with Disadvantage.
@@ -99,10 +98,11 @@ dice roll.
 
 ### Battle-board
 
-Statblock integrates cleanly alongside **Battle-board**. While Battle-board
-manages the initiative order and combat flow, you can keep your target's stat
-block open right next to it, giving you a complete command center for running
-your encounters.
+Statblock integrates cleanly alongside
+[**Battle-board**](https://extensions.owlbear.rodeo/battle-board). While
+Battle-board manages the initiative order and combat flow, you can keep your
+target's stat block open right next to it, giving you a complete command center
+for running your encounters.
 
 - **Shortcut**: Double-clicking a monster's name within the Battle-board list
   will automatically open its stat block in this extension.
