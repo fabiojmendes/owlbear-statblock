@@ -106,6 +106,11 @@ UI:
 - `{@recharge 5}` -> Creates a clickable recharge dice button (Recharge 5-6).
 - `{@condition blinded}` / `{@spell fireball}` -> Bolds the text.
 
+> [!TIP]
+> You can find hundreds of real-world examples of how to format complex
+> monsters, spells, and traits in the built-in
+> [bestiary.json](../public/data/bestiary.json) file.
+
 ---
 
 ## Advanced: Using `_copy`
