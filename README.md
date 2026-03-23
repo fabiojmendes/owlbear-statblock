@@ -31,7 +31,10 @@ roll from during encounters.
 ![Demonstration of how to use the extension](./docs/images/how-to-use.gif)
 
 1. **Install the Extension**: Add the Owlbear Statblock extension to your
-   Owlbear Rodeo room.
+   Owlbear Rodeo room using the manifest URL:
+   ```text
+   https://statblock.juzam.pro/manifest.json
+   ```
 2. **Add a Token**: Drag and drop a character token onto the map.
    - **Tip**: If you name your image file after the monster (e.g.,
      `Goblin.png`), Owlbear Rodeo will often use that as the token name
