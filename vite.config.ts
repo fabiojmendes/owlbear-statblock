@@ -1,15 +1,40 @@
+import { exec } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+
+const execAsync = promisify(exec);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const pkg = JSON.parse(
   await fs.readFile(path.resolve(__dirname, "package.json"), "utf-8"),
 );
+
+function zipTokensPlugin() {
+  return {
+    name: "zip-tokens",
+    async closeBundle() {
+      const tokensDir = path.resolve(__dirname, "docs/tokens");
+      const outDir = path.resolve(__dirname, "dist/data");
+      const outZip = path.resolve(outDir, "token-pack.zip");
+
+      await fs.mkdir(outDir, { recursive: true });
+      try {
+        await execAsync(
+          `zip -q -j "${outZip}" "${tokensDir}"/*.webp "${tokensDir}/LICENSE-CC0.txt"`,
+        );
+        console.log(`Created ${outZip}`);
+      } catch (err) {
+        console.error("Failed to create token-pack.zip:", err);
+      }
+    },
+  };
+}
 
 function manifestPlugin() {
   return {
@@ -59,7 +84,7 @@ function manifestPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), manifestPlugin()],
+  plugins: [react(), manifestPlugin(), zipTokensPlugin()],
   build: {
     rollupOptions: {
       input: {
