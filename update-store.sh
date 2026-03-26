@@ -30,11 +30,7 @@ EOF
 # Use sed to replace image links and document links and append to store.md
 sed \
   -e "1d" \
-  -e "s|!\[\([^]]*\)\](docs/images/\([^)]*\))|![\1]($RAW_BASE_URL/docs/images/\2)|g" \
   -e "s|!\[\([^]]*\)\](\./docs/images/\([^)]*\))|![\1]($RAW_BASE_URL/docs/images/\2)|g" \
-  -e "s|\[\([^]]*\)\](\./docs/\([^)]*\.md\))|[\1]($BLOB_BASE_URL/docs/\2)|g" \
-  -e "s|\[\([^]]*\)\](\./docs/tokens\([^)]*\))|[\1]($BLOB_BASE_URL/docs/tokens\2)|g" \
-  -e "s|\[\([^]]*\)\](\./\([^)]*\.md\))|[\1]($BLOB_BASE_URL/\2)|g" \
   -e "s|\[\([^]]*\)\](\./\([^)]*\))|[\1]($BLOB_BASE_URL/\2)|g" \
   README.md >>./docs/store.md
 
