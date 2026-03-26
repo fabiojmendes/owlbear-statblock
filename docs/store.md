@@ -63,8 +63,9 @@ You can expand your bestiary beyond the built-in SRD by uploading your own
 monster packs.
 
 1. **Prepare your JSON**: Your custom monsters must follow a specific data
-   format. Refer to the [Custom Pack Formatting Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/FORMAT.md) for
-   schema details and interactive tag support.
+   format. Refer to the
+   [Custom Pack Formatting Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/FORMAT.md)
+   for schema details and interactive tag support.
 2. **Access the Manager**: Click the **Settings (gear icon)** in the extension
    panel to open the Custom Packs manager.
 3. **Upload and Validate**: Click **Upload** to select your `.json` file.
@@ -112,7 +113,8 @@ for running your encounters.
 ## Contributing
 
 If you're a developer interested in improving the extension or seeing how it
-works under the hood, check out the [Contributing Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/CONTRIBUTING.md).
+works under the hood, check out the
+[Contributing Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/CONTRIBUTING.md).
 
 ## Legal
 
@@ -121,3 +123,13 @@ This work includes material from the System Reference Document 5.2.1 (“SRD
 <https://www.dndbeyond.com/srd>. The SRD 5.2.1 is licensed under the Creative
 Commons Attribution 4.0 International License, available at
 <https://creativecommons.org/licenses/by/4.0/legalcode>.
+
+## License
+
+The source code in this repository is licensed under the MIT License. See the
+[LICENSE](./LICENSE) file for details.
+
+**Assets** The AI-generated tokens located in the
+[docs/tokens](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/tokens)
+directory are dedicated to the public domain under CC0 1.0 Universal. See
+`docs/tokens/LICENSE-CC0.txt` for details.

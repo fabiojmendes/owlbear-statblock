@@ -110,3 +110,12 @@ This work includes material from the System Reference Document 5.2.1 (“SRD
 <https://www.dndbeyond.com/srd>. The SRD 5.2.1 is licensed under the Creative
 Commons Attribution 4.0 International License, available at
 <https://creativecommons.org/licenses/by/4.0/legalcode>.
+
+## License
+
+The source code in this repository is licensed under the MIT License. See the
+[LICENSE](./LICENSE) file for details.
+
+**Assets** The AI-generated tokens located in the [docs/tokens](./docs/tokens)
+directory are dedicated to the public domain under CC0 1.0 Universal. See
+`docs/tokens/LICENSE-CC0.txt` for details.

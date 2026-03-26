@@ -105,3 +105,14 @@ done
   VTT grid size.
 - **`-quality $QUALITY "token_$name.webp"`**: Applies the compression variable
   and saves the final optimized output.
+
+## Images
+
+The AI-generated images in this directory are free to use for any purpose.
+
+[![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
+
+To the extent possible under law, the creator has waived all copyright and
+related or neighboring rights to these assets. See the
+[LICENSE-CC0.txt](./LICENSE-CC0.txt) file in this directory for the full legal
+text.
