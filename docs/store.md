@@ -57,15 +57,29 @@ roll from during encounters.
 5. **View the Stat Block**: Select a token. If a match was found, its
    interactive stat block will appear in the window.
 
+### Download Monster Tokens
+
+To help you get started, a pre-made pack of tokens for all 330 monsters in the
+SRD is provided. These tokens are already named to match the extension's
+detection system.
+
+- **[Download Token Pack (ZIP)](https://statblock.juzam.pro/data/token-pack.zip)**
+
 ### Managing Custom Packs
 
 You can expand your bestiary beyond the built-in SRD by uploading your own
 monster packs.
 
+> [!IMPORTANT]
+> **Backup your files!** Custom packs are stored directly in your web browser.
+> This means they are not shared between different computers or browsers. It is
+> highly recommended to keep a backup of your monster pack files in a safe
+> place, such as Google Drive or Dropbox, so they can be easily restored if
+> browser history is cleared or a new device is used.
+
 1. **Prepare your JSON**: Your custom monsters must follow a specific data
-   format. Refer to the
-   [Custom Pack Formatting Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/FORMAT.md)
-   for schema details and interactive tag support.
+   format. Refer to the [Custom Pack Formatting Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/FORMAT.md) for
+   schema details and interactive tag support.
 2. **Access the Manager**: Click the **Settings (gear icon)** in the extension
    panel to open the Custom Packs manager.
 3. **Upload and Validate**: Click **Upload** to select your `.json` file.
@@ -113,8 +127,7 @@ for running your encounters.
 ## Contributing
 
 If you're a developer interested in improving the extension or seeing how it
-works under the hood, check out the
-[Contributing Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/CONTRIBUTING.md).
+works under the hood, check out the [Contributing Guide](https://github.com/fabiojmendes/owlbear-statblock/blob/master/CONTRIBUTING.md).
 
 ## Legal
 
@@ -127,9 +140,8 @@ Commons Attribution 4.0 International License, available at
 ## License
 
 The source code in this repository is licensed under the MIT License. See the
-[LICENSE](./LICENSE) file for details.
+[LICENSE](https://github.com/fabiojmendes/owlbear-statblock/blob/master/LICENSE) file for details.
 
-**Assets** The AI-generated tokens located in the
-[docs/tokens](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/tokens)
+**Assets** The AI-generated tokens located in the [docs/tokens](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/tokens)
 directory are dedicated to the public domain under CC0 1.0 Universal. See
-`docs/tokens/LICENSE-CC0.txt` for details.
+[LICENSE-CC0.txt](https://github.com/fabiojmendes/owlbear-statblock/blob/master/docs/tokens/LICENSE-CC0.txt) for details.
