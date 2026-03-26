@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/fabiojmendes/owlbear-statblock/compare/v1.0.1...v1.1.0) (2026-03-26)
+
+
+### Features
+
+* include pack of tokens for add SRD 5.2 list ([766c6c1](https://github.com/fabiojmendes/owlbear-statblock/commit/766c6c1aea9e2a74112fa55b634f1de10ee830da))
+
 ## [1.0.1](https://github.com/fabiojmendes/owlbear-statblock/compare/v1.0.0...v1.0.1) (2026-03-23)
 
 
