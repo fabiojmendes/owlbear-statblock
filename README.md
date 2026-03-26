@@ -133,4 +133,4 @@ The source code in this repository is licensed under the MIT License. See the
 
 **Assets** The AI-generated tokens located in the [docs/tokens](./docs/tokens)
 directory are dedicated to the public domain under CC0 1.0 Universal. See
-`docs/tokens/LICENSE-CC0.txt` for details.
+[LICENSE-CC0.txt](./docs/tokens/LICENSE-CC0.txt) for details.
