@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/fabiojmendes/owlbear-statblock/compare/v1.1.0...v1.1.1) (2026-04-07)
+
+
+### Bug Fixes
+
+* handle spellcasting as bonus action, reactions or legendary actions ([#21](https://github.com/fabiojmendes/owlbear-statblock/issues/21)) ([0f27db7](https://github.com/fabiojmendes/owlbear-statblock/commit/0f27db7f3b21d01b9d1ec7fbd4f79f7194790ddb))
+
 ## [1.1.0](https://github.com/fabiojmendes/owlbear-statblock/compare/v1.0.1...v1.1.0) (2026-03-26)
 
 
