@@ -98,7 +98,7 @@ function StatBlock() {
     await OBR.popover.setHeight(`${ID}/statblock`, newMinimized ? 60 : 500);
   };
 
-  const renderTraits = (traits: any[]) => {
+  const renderTraits = (traits: any[] | undefined) => {
     if (!traits || !Array.isArray(traits)) return null;
     return traits.map((trait, idx) => (
       <div key={idx} className="statblock-trait">
@@ -347,30 +347,58 @@ function StatBlock() {
                 </>
               )}
 
-              {monster.action && (
+              {(monster.action ||
+                monster.spellcasting?.some(
+                  (sc) => !sc.displayAs || sc.displayAs === "action",
+                )) && (
                 <>
                   <h2 className="statblock-section-title">Actions</h2>
                   {renderTraits(monster.action)}
                   {monster.spellcasting &&
-                    renderSpellcasting(monster.spellcasting)}
+                    renderSpellcasting(
+                      monster.spellcasting.filter(
+                        (sc) => !sc.displayAs || sc.displayAs === "action",
+                      ),
+                    )}
                 </>
               )}
 
-              {monster.bonus && (
+              {(monster.bonus ||
+                monster.spellcasting?.some(
+                  (sc) => sc.displayAs === "bonus",
+                )) && (
                 <>
                   <h2 className="statblock-section-title">Bonus Actions</h2>
                   {renderTraits(monster.bonus)}
+                  {monster.spellcasting &&
+                    renderSpellcasting(
+                      monster.spellcasting.filter(
+                        (sc) => sc.displayAs === "bonus",
+                      ),
+                    )}
                 </>
               )}
 
-              {monster.reaction && (
+              {(monster.reaction ||
+                monster.spellcasting?.some(
+                  (sc) => sc.displayAs === "reaction",
+                )) && (
                 <>
                   <h2 className="statblock-section-title">Reactions</h2>
                   {renderTraits(monster.reaction)}
+                  {monster.spellcasting &&
+                    renderSpellcasting(
+                      monster.spellcasting.filter(
+                        (sc) => sc.displayAs === "reaction",
+                      ),
+                    )}
                 </>
               )}
 
-              {monster.legendary && (
+              {(monster.legendary ||
+                monster.spellcasting?.some(
+                  (sc) => sc.displayAs === "legendary",
+                )) && (
                 <>
                   <h2 className="statblock-section-title">Legendary Actions</h2>
                   <div className="subtitle">
@@ -386,6 +414,12 @@ function StatBlock() {
                     </em>
                   </div>
                   {renderTraits(monster.legendary)}
+                  {monster.spellcasting &&
+                    renderSpellcasting(
+                      monster.spellcasting.filter(
+                        (sc) => sc.displayAs === "legendary",
+                      ),
+                    )}
                 </>
               )}
             </>
